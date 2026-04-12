@@ -6,5 +6,16 @@ node_modules/
 *.db-wal
 prisma/dev.db
 .DS_Store
+.claude/
+
+# Große Quelldateien – nur lokal, nicht im Repo
+Fotos/
+Icons/
+Logo/PDF/
+Logo/EPS/
+*.eps
+*.zip
+PROMPT-NEXTJS-WEBSITE.md
+Visitenkarten/
 
 /src/generated/prisma
