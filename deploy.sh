@@ -17,6 +17,13 @@ else
   exit 1
 fi
 
+echo "▶ Git: Änderungen committen & pushen..."
+if [ -n "$(git status --porcelain)" ]; then
+  git add -A
+  git commit -m "deploy: $(date '+%Y-%m-%d %H:%M') [$MODE]"
+fi
+git push origin main
+
 echo "▶ Quellcode übertragen..."
 rsync -avz --delete \
   --exclude='.git' \
