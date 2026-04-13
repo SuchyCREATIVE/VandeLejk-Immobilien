@@ -1,6 +1,32 @@
 import Link from "next/link";
 import Image from "next/image";
 
+function IconInstagram({ size = 17 }: { size?: number }) {
+  return (
+    <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+      <rect x="2" y="2" width="20" height="20" rx="5" ry="5"/>
+      <circle cx="12" cy="12" r="4"/>
+      <circle cx="17.5" cy="6.5" r="0.5" fill="currentColor" stroke="none"/>
+    </svg>
+  );
+}
+function IconFacebook({ size = 17 }: { size?: number }) {
+  return (
+    <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+      <path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"/>
+    </svg>
+  );
+}
+function IconLinkedin({ size = 17 }: { size?: number }) {
+  return (
+    <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+      <path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"/>
+      <rect x="2" y="9" width="4" height="12"/>
+      <circle cx="4" cy="4" r="2"/>
+    </svg>
+  );
+}
+
 export default function Footer() {
   return (
     <footer className="bg-anthrazit-dark text-white/60">
@@ -16,10 +42,38 @@ export default function Footer() {
               height={42}
               className="mb-5"
             />
-            <p className="text-sm leading-relaxed">
+            <p className="text-sm leading-relaxed mb-6">
               Persönliche Immobilienberatung<br />
               in Hilden und Umgebung.
             </p>
+
+            {/* Social Media */}
+            <div className="flex items-center gap-4">
+              <a
+                href="https://www.instagram.com/vandelejk_immobilien/"
+                target="_blank" rel="noopener noreferrer"
+                className="text-white/40 hover:text-white transition-colors duration-200"
+                aria-label="Instagram"
+              >
+                <IconInstagram size={17} />
+              </a>
+              <a
+                href="https://www.facebook.com/vanessa.lejk"
+                target="_blank" rel="noopener noreferrer"
+                className="text-white/40 hover:text-white transition-colors duration-200"
+                aria-label="Facebook"
+              >
+                <IconFacebook size={17} />
+              </a>
+              <a
+                href="https://www.linkedin.com/in/vanessa-lejk-b9a099221/"
+                target="_blank" rel="noopener noreferrer"
+                className="text-white/40 hover:text-white transition-colors duration-200"
+                aria-label="LinkedIn"
+              >
+                <IconLinkedin size={17} />
+              </a>
+            </div>
           </div>
 
           {/* Navigation */}
@@ -29,10 +83,9 @@ export default function Footer() {
             </h4>
             <ul className="space-y-3">
               {[
-                { href: "/",           label: "Home" },
-                { href: "/angebot",    label: "Mein Angebot" },
-                { href: "/immobilien", label: "Immobilienangebote" },
-                { href: "/kontakt",    label: "Kontakt" },
+                { href: "/",        label: "Home" },
+                { href: "/angebot", label: "Mein Angebot" },
+                { href: "/kontakt", label: "Kontakt" },
               ].map((l) => (
                 <li key={l.href}>
                   <Link
@@ -62,27 +115,12 @@ export default function Footer() {
 
         {/* Bottom bar */}
         <div className="border-t border-white/10 pt-8 flex flex-col md:flex-row justify-between items-center gap-5 text-[11px]">
-          <p>© {new Date().getFullYear()} VandeLejk Immobilien – Vanessa Lejk</p>
+          <p>© {new Date().getFullYear()} VandeLejk Immobilien</p>
 
           <div className="flex gap-6">
             <Link href="/impressum"   className="hover:text-white transition-colors">Impressum</Link>
             <Link href="/datenschutz" className="hover:text-white transition-colors">Datenschutz</Link>
           </div>
-
-          {/* SuchyCREATIVE Signatur */}
-          <a
-            href="https://suchycreative.de"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="opacity-50 hover:opacity-100 transition-opacity"
-          >
-            {/* eslint-disable-next-line @next/next/no-img-element */}
-            <img
-              src="https://suchycreative.de/images/Logo/suchy-creative-logo-font-white.svg"
-              alt="Webdesign by SuchyCREATIVE"
-              className="h-6"
-            />
-          </a>
         </div>
       </div>
     </footer>

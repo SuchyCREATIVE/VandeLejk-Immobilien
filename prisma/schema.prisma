@@ -11,14 +11,26 @@ datasource db {
 }
 
 model User {
-  id            String    @id @default(cuid())
-  username      String    @unique
-  email         String    @unique
-  passwordHash  String
-  role          String    @default("redakteur") // "admin" | "redakteur"
-  createdAt     DateTime  @default(now())
-  lastLoginAt   DateTime?
-  sessions      Session[]
+  id                 String               @id @default(cuid())
+  username           String               @unique
+  email              String               @unique
+  passwordHash       String
+  role               String               @default("redakteur") // "admin" | "redakteur"
+  mustChangePassword Boolean              @default(false)
+  createdAt          DateTime             @default(now())
+  lastLoginAt        DateTime?
+  sessions           Session[]
+  resetTokens        PasswordResetToken[]
+}
+
+model PasswordResetToken {
+  id        String   @id @default(cuid())
+  userId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  token     String   @unique
+  expiresAt DateTime
+  used      Boolean  @default(false)
+  createdAt DateTime @default(now())
 }
 
 model Session {
@@ -32,4 +44,35 @@ model Settings {
   key       String   @id
   value     String
   updatedAt DateTime @updatedAt
+}
+
+model Testimonial {
+  id        String   @id @default(cuid())
+  name      String
+  role      String   @default("")
+  text      String
+  rating    Int      @default(5)
+  sortOrder Int      @default(0)
+  active    Boolean  @default(true)
+  createdAt DateTime @default(now())
+}
+
+model Property {
+  id          String   @id @default(cuid())
+  address     String
+  city        String
+  type        String   @default("Eigentumswohnung")
+  status      String   @default("Verfügbar")
+  price       String   @default("auf Anfrage")
+  area        String   @default("")
+  rooms       Int      @default(3)
+  bathrooms   Int      @default(1)
+  floor       String   @default("")
+  yearBuilt   String   @default("")
+  description String   @default("")
+  highlights  String   @default("[]")
+  photos      String   @default("[]")
+  active      Boolean  @default(true)
+  sortOrder   Int      @default(0)
+  createdAt   DateTime @default(now())
 }

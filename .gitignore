@@ -19,3 +19,5 @@ PROMPT-NEXTJS-WEBSITE.md
 Visitenkarten/
 
 /src/generated/prisma
+/public/uploads/
+/data/

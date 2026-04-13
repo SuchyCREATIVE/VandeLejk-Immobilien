@@ -22,12 +22,13 @@ function isRateLimited(ip: string): boolean {
 
 /* ─── Validation ──────────────────────────────────────────── */
 const schema = z.object({
-  name:     z.string().min(2).max(100),
-  email:    z.string().email(),
-  phone:    z.string().max(30).optional(),
-  message:  z.string().min(10).max(3000),
-  privacy:  z.literal(true),
-  hp_field: z.string().max(0).optional(), // honeypot
+  firstname: z.string().min(2).max(50),
+  lastname:  z.string().min(2).max(50),
+  email:     z.string().email(),
+  phone:     z.string().min(6).max(30),
+  message:   z.string().min(10).max(3000),
+  privacy:   z.literal(true),
+  hp_field:  z.string().max(0).optional(), // honeypot
 });
 
 /* ─── Handler ─────────────────────────────────────────────── */
@@ -60,7 +61,8 @@ export async function POST(req: NextRequest) {
     );
   }
 
-  const { name, email, phone, message, hp_field } = parsed.data;
+  const { firstname, lastname, email, phone, message, hp_field } = parsed.data;
+  const name = `${firstname} ${lastname}`;
 
   // Honeypot check
   if (hp_field) {
