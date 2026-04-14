@@ -43,16 +43,21 @@ export default function ImmobilieEditPage() {
   useEffect(() => {
     if (isNew) return;
     fetch(`/api/admin/properties/${id}`)
-      .then((r) => r.json())
+      .then(async (r) => {
+        if (!r.ok) throw new Error(`HTTP ${r.status}`);
+        return r.json();
+      })
       .then((p) => {
+        if (!p || p.error) { setMsg(`Ladefehler: ${p?.error ?? "unbekannt"}`); setLoading(false); return; }
         setForm({
           address: p.address, city: p.city, type: p.type, status: p.status,
           price: p.price, area: p.area, rooms: p.rooms, bathrooms: p.bathrooms,
           floor: p.floor, yearBuilt: p.yearBuilt, description: p.description,
-          highlights: p.highlights, photos: p.photos, active: p.active,
+          highlights: p.highlights ?? [], photos: p.photos ?? [], active: p.active,
         });
         setLoading(false);
-      });
+      })
+      .catch((e) => { setMsg(`Fehler: ${e.message}`); setLoading(false); });
   }, [id, isNew]);
 
   async function save() {
@@ -118,7 +123,7 @@ export default function ImmobilieEditPage() {
   // ── Custom Drag (kein HTML5 DnD API, kein Pointer-Events API) ──────────
   // Funktioniert in Chrome, Firefox, Safari – egal ob Bilder oder nicht
   function startDrag(idx: number, e: React.MouseEvent<HTMLDivElement>) {
-    e.preventDefault(); // verhindert Textselektierung
+    if ((e.target as HTMLElement).closest("button")) return; // Button-Klicks ignorieren
 
     dragState.current = { from: idx };
     setIsDragging(true);
@@ -286,16 +291,26 @@ export default function ImmobilieEditPage() {
           </h2>
           <p className="text-xs text-anthrazit-light mb-4">Gedrückt halten und ziehen zum Umsortieren</p>
 
-          {/* Upload-Bereich – separates Element, kein Konflikt mit Foto-Grid */}
+          {/* Upload-Bereich */}
           <div className="mb-4">
-            <label className="flex items-center gap-3 border-2 border-dashed border-beige hover:border-sand transition-colors cursor-pointer bg-[#f5f4f1] px-5 py-4 w-full">
+            <input
+              ref={fileRef}
+              type="file"
+              accept="image/jpeg,image/png,image/webp"
+              multiple
+              style={{ display: "none" }}
+              onChange={(e) => e.target.files && uploadPhotos(e.target.files)}
+            />
+            <button
+              type="button"
+              onClick={() => fileRef.current?.click()}
+              className="flex items-center gap-3 border-2 border-dashed border-beige hover:border-sand transition-colors cursor-pointer bg-[#f5f4f1] px-5 py-4 w-full text-left"
+            >
               <Upload size={16} className="text-sand flex-shrink-0" />
               <span className="text-sm text-anthrazit-light">
                 {uploading ? "Wird hochgeladen…" : "Fotos auswählen (JPG, PNG, WebP)"}
               </span>
-              <input ref={fileRef} type="file" accept="image/jpeg,image/png,image/webp" multiple
-                onChange={(e) => e.target.files && uploadPhotos(e.target.files)} className="hidden" />
-            </label>
+            </button>
           </div>
 
           {/* Foto-Grid */}
