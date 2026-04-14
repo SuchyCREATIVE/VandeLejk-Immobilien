@@ -17,48 +17,44 @@
 - Nodemailer (SMTP)
 - react-hook-form + zod
 - bcryptjs (Passwörter)
+- sharp (Bildrotation)
 
 ## Wichtige Hinweise
 - ⚠ Prisma 7: `prisma.config.ts` steuert datasource URL (nicht schema.prisma)
 - ⚠ TailwindCSS v4: Nur `@theme { ... }` in globals.css – keine tailwind.config.ts
 - ⚠ Port: 3002 (PM2 auf Server)
 - Nach Schema-Änderung: `npm run db:push && npm run db:generate`
+- Kein lokales Testing – direkt auf scpreview deployen
+- Foto-Uploads landen in `public/uploads/properties/` und werden über `/api/uploads/[...path]` ausgeliefert (Next.js Production serviert keine dynamisch hinzugefügten Dateien aus public/)
 
-## Seiten
-1. Home – Kurzbeschreibung, Leistungen anreißen, Kundenstimmen
-2. Mein Angebot für Sie – Leistungsbeschreibung, alle Leistungen
-3. Immobilienangebote – Beispiel-Objekt als Vorlage
-4. Kontakt – Adresse, Tel, E-Mail, Über-mich Bild+Text, Kontaktformular
-5. Impressum – /impressum
-6. Datenschutz – /datenschutz
+## Deploy
+- Preview: `./deploy.sh preview`
+- Live: `./deploy.sh live` (erst nach Freigabe durch Dennis!)
+- DB + Uploads vom Server holen: `./pull-data.sh preview`
 
 ## Design-Vorgaben
 - Farben: Weiß, Beige, Anthrazit #50535a
 - Stil: Clean, leger, smart – KEIN generisches KI-Design
 - Referenz: https://www.laura-liedtke-immobilien.de/
-- Fonts: Playfair Display (Headings), Gill Sans Light (Subheadings)
+- Fonts: Playfair Display (Headings), Jost (Body/UI)
 - Logo: Logo/SVG/VandeLejk-Logo-*.svg (schwarz/weiß/grau)
 
-## Deploy
-- Preview: `./deploy.sh preview`
-- Live: `./deploy.sh live` (erst nach Freigabe durch Dennis!)
-- Kein lokales Testing – direkt auf scpreview deployen
-
-## Initial-Admin
-- User: dennis / dennis@suchycreative.de / password (bitte ändern!)
-
-## Projektphase
-<!-- Hier immer aktuell halten -->
-- [x] Grundstruktur
-- [ ] Design & Frontend
-- [ ] Backend & Admin
-- [ ] Content eintragen
-- [ ] Preview testen
-- [ ] Live-Deploy
-
-## Zuletzt gemacht
-- Projekt initialisiert (Next.js 16, Prisma 7, alle Deps)
+## Projektstand (2026-04-15)
+- [x] Grundstruktur + Tech-Stack
+- [x] Design & Frontend (alle öffentlichen Seiten)
+- [x] Admin-Bereich vollständig (Login, Immobilien-CRUD, Kundenstimmen, Einstellungen)
+- [x] SEO (Sitemap, robots.txt, JSON-LD, seitenspezifische Meta-Tags)
+- [x] WCAG / Mobile-Responsiveness
+- [ ] Echte Inhalte eintragen (Vanessa: Texte, Fotos, Google-Reviews API Key)
+- [ ] Abnahme auf Preview durch Kundin
+- [ ] Live-Deploy (erst nach Freigabe durch Dennis!)
 
 ## Als nächstes
-- Design entwickeln (Referenz: laura-liedtke-immobilien.de)
-- Frontend-Seiten umsetzen
+1. Vanessa trägt Inhalte ein (Immobilien-Objekte, echte Fotos, Kundenstimmen)
+2. Google-Reviews API Key in Admin → Einstellungen eintragen
+3. Abnahme-Runde auf scpreview
+4. Live-Deploy mit `./deploy.sh live`
+
+## Admin-Zugang (Preview)
+- URL: https://vandelejk-immobilien.scpreview.de/admin
+- User: dennis / dennis@suchycreative.de
