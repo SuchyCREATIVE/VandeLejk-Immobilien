@@ -42,10 +42,15 @@ function Gallery({ photos, address, city }: { photos: string[]; address: string;
   };
 
   const handleKey = useCallback((e: KeyboardEvent) => {
-    if (e.key === "ArrowLeft")  setActive((a) => (a - 1 + photos.length) % photos.length);
-    if (e.key === "ArrowRight") setActive((a) => (a + 1) % photos.length);
-    if (e.key === "Escape")     setLightbox(null);
-  }, [photos.length]);
+    if (e.key === "Escape") { setLightbox(null); return; }
+    if (lightbox !== null) {
+      if (e.key === "ArrowLeft")  setLightbox((l) => l !== null ? (l - 1 + photos.length) % photos.length : l);
+      if (e.key === "ArrowRight") setLightbox((l) => l !== null ? (l + 1) % photos.length : l);
+    } else {
+      if (e.key === "ArrowLeft")  setActive((a) => (a - 1 + photos.length) % photos.length);
+      if (e.key === "ArrowRight") setActive((a) => (a + 1) % photos.length);
+    }
+  }, [photos.length, lightbox]);
 
   useEffect(() => {
     window.addEventListener("keydown", handleKey);
