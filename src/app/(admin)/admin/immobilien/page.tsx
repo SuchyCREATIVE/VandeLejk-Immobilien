@@ -46,9 +46,8 @@ export default function ImmobilienAdmin() {
   const [msg, setMsg]           = useState("");
   const fileRef    = useRef<HTMLInputElement>(null);
   const dragIdx    = useRef<number | null>(null);
-  const [dragOver,       setDragOver]       = useState<number | null>(null);
-  const [photoVersions,  setPhotoVersions]  = useState<Record<string, number>>({});
-  const [rotating,       setRotating]       = useState<number | null>(null);
+  const [dragOver,  setDragOver]  = useState<number | null>(null);
+  const [rotating,  setRotating]  = useState<number | null>(null);
 
   async function load() {
     const r = await fetch("/api/admin/properties");
@@ -65,7 +64,6 @@ export default function ImmobilienAdmin() {
       floor: p.floor, yearBuilt: p.yearBuilt, description: p.description,
       highlights: p.highlights, photos: p.photos, active: p.active,
     });
-    setPhotoVersions({});
     setMsg("");
   }
 
@@ -73,7 +71,6 @@ export default function ImmobilienAdmin() {
     setEditId("new");
     setForm(EMPTY_FORM);
     setHighlightInput("");
-    setPhotoVersions({});
     setMsg("");
   }
 
@@ -182,7 +179,13 @@ export default function ImmobilienAdmin() {
         body: JSON.stringify({ photoPath: src }),
       });
       if (r.ok) {
-        setPhotoVersions((v) => ({ ...v, [src]: Date.now() }));
+        const { newPath } = await r.json();
+        // Pfad in form.photos ersetzen → neuer Name umgeht Next.js Image-Cache
+        setForm((f) => {
+          const photos = [...f.photos];
+          photos[idx] = newPath;
+          return { ...f, photos };
+        });
       }
     } finally {
       setRotating(null);
@@ -345,7 +348,7 @@ export default function ImmobilienAdmin() {
                   >
                     {/* eslint-disable-next-line @next/next/no-img-element */}
                     <img
-                      src={`${src.split("?")[0]}${photoVersions[src.split("?")[0]] ? "?v=" + photoVersions[src.split("?")[0]] : ""}`}
+                      src={src}
                       alt=""
                       className="w-full h-full object-cover pointer-events-none"
                     />
