@@ -310,11 +310,13 @@ export default function ImmobilieEditPage() {
             <button
               type="button"
               onClick={() => fileRef.current?.click()}
+              onDragOver={(e) => e.preventDefault()}
+              onDrop={(e) => { e.preventDefault(); if (e.dataTransfer.files.length) uploadPhotos(e.dataTransfer.files); }}
               className="flex items-center gap-3 border-2 border-dashed border-beige hover:border-sand transition-colors cursor-pointer bg-[#f5f4f1] px-5 py-4 w-full text-left"
             >
               <Upload size={16} className="text-sand flex-shrink-0" />
               <span className="text-sm text-anthrazit-light">
-                {uploading ? "Wird hochgeladen…" : "Fotos auswählen (JPG, PNG, WebP)"}
+                {uploading ? "Wird hochgeladen…" : "Fotos hier ablegen oder klicken zum Auswählen"}
               </span>
             </button>
           </div>
