@@ -141,8 +141,10 @@ export default function ImmobilienAdmin() {
     setForm((f) => ({ ...f, photos }));
   }
 
-  const onDragStart = useCallback((idx: number) => {
+  const onDragStart = useCallback((e: React.DragEvent, idx: number) => {
     dragIdx.current = idx;
+    e.dataTransfer.effectAllowed = "move";
+    e.dataTransfer.setData("text/plain", String(idx));
   }, []);
 
   const onDragOver = useCallback((e: React.DragEvent, idx: number) => {
@@ -338,7 +340,7 @@ export default function ImmobilienAdmin() {
                   <div
                     key={src + i}
                     draggable
-                    onDragStart={() => onDragStart(i)}
+                    onDragStart={(e) => onDragStart(e, i)}
                     onDragOver={(e) => onDragOver(e, i)}
                     onDrop={(e) => onDrop(e, i)}
                     onDragEnd={onDragEnd}
@@ -350,7 +352,8 @@ export default function ImmobilienAdmin() {
                     <img
                       src={src}
                       alt=""
-                      className="w-full h-full object-cover pointer-events-none"
+                      draggable={false}
+                      className="w-full h-full object-cover pointer-events-none select-none"
                     />
                     {/* Drag-Handle */}
                     <div className="absolute top-1 right-1 bg-anthrazit-dark/60 text-white p-0.5 opacity-0 group-hover:opacity-100 transition-opacity">
