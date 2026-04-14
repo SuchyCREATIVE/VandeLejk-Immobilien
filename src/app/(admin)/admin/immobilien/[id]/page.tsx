@@ -122,9 +122,12 @@ export default function ImmobilieEditPage() {
   }
 
   // ── HTML5 DnD handlers (auf <div> mit background-image, kein <img>) ──
-  function handleDragStart(idx: number) {
+  function handleDragStart(idx: number, e: React.DragEvent) {
+    // Explizit setzen – verhindert dass Firefox eine CSS-background-URL als Drag-Ziel nutzt
+    e.dataTransfer.clearData();
+    e.dataTransfer.setData("text/plain", String(idx));
+    e.dataTransfer.effectAllowed = "move";
     dragIdx.current = idx;
-    // State-Update verzögert damit Browser-Ghost korrekt gerendert wird
     setTimeout(() => setDragOver(idx), 0);
   }
 
@@ -270,12 +273,16 @@ export default function ImmobilieEditPage() {
 
           {/* Foto-Grid */}
           {form.photos.length > 0 && (
-            <div className="grid grid-cols-4 gap-3">
+            <div
+              className="grid grid-cols-4 gap-3"
+              onDragOver={(e) => e.preventDefault()}
+              onDrop={(e) => e.preventDefault()}
+            >
               {form.photos.map((src, i) => (
                 <div
                   key={src + i}
                   draggable
-                  onDragStart={() => handleDragStart(i)}
+                  onDragStart={(e) => handleDragStart(i, e)}
                   onDragOver={(e) => handleDragOver(i, e)}
                   onDrop={(e) => handleDrop(i, e)}
                   onDragEnd={handleDragEnd}
