@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState, useRef, useCallback } from "react";
+import { useEffect, useState, useRef } from "react";
 import Image from "next/image";
 import {
   Plus, Pencil, Trash2, Check, X, Eye, EyeOff,
@@ -44,10 +44,11 @@ export default function ImmobilienAdmin() {
   const [saving, setSaving]     = useState(false);
   const [uploading, setUploading] = useState(false);
   const [msg, setMsg]           = useState("");
-  const fileRef    = useRef<HTMLInputElement>(null);
-  const dragIdx    = useRef<number | null>(null);
+  const fileRef     = useRef<HTMLInputElement>(null);
+  const [dragging,  setDragging]  = useState<number | null>(null);
   const [dragOver,  setDragOver]  = useState<number | null>(null);
   const [rotating,  setRotating]  = useState<number | null>(null);
+  const draggingRef = useRef<number | null>(null);
 
   async function load() {
     const r = await fetch("/api/admin/properties");
@@ -141,35 +142,47 @@ export default function ImmobilienAdmin() {
     setForm((f) => ({ ...f, photos }));
   }
 
-  const onDragStart = useCallback((e: React.DragEvent, idx: number) => {
-    dragIdx.current = idx;
-    e.dataTransfer.effectAllowed = "move";
-    e.dataTransfer.setData("text/plain", String(idx));
+  // Pointer-Event DnD mit elementFromPoint – funktioniert in Chrome, Firefox, Safari
+  useEffect(() => {
+    function onPointerMove(e: PointerEvent) {
+      if (draggingRef.current === null) return;
+      const el = document.elementFromPoint(e.clientX, e.clientY);
+      const tile = el?.closest("[data-photo-idx]") as HTMLElement | null;
+      const idx = tile ? parseInt(tile.dataset.photoIdx!) : null;
+      setDragOver(idx);
+    }
+    function onPointerUp(e: PointerEvent) {
+      if (draggingRef.current === null) return;
+      const el = document.elementFromPoint(e.clientX, e.clientY);
+      const tile = el?.closest("[data-photo-idx]") as HTMLElement | null;
+      const targetIdx = tile ? parseInt(tile.dataset.photoIdx!) : null;
+      const fromIdx = draggingRef.current;
+      if (targetIdx !== null && targetIdx !== fromIdx) {
+        setForm((f) => {
+          const photos = [...f.photos];
+          const [moved] = photos.splice(fromIdx, 1);
+          photos.splice(targetIdx, 0, moved);
+          return { ...f, photos };
+        });
+      }
+      draggingRef.current = null;
+      setDragging(null);
+      setDragOver(null);
+    }
+    document.addEventListener("pointermove", onPointerMove);
+    document.addEventListener("pointerup", onPointerUp);
+    return () => {
+      document.removeEventListener("pointermove", onPointerMove);
+      document.removeEventListener("pointerup", onPointerUp);
+    };
   }, []);
 
-  const onDragOver = useCallback((e: React.DragEvent, idx: number) => {
-    e.preventDefault();
+  function onPhotoPointerDown(idx: number, e: React.PointerEvent<HTMLDivElement>) {
+    e.preventDefault(); // verhindert Browser-Standard-Drag (Bild öffnen in Firefox)
+    draggingRef.current = idx;
+    setDragging(idx);
     setDragOver(idx);
-  }, []);
-
-  const onDrop = useCallback((e: React.DragEvent, idx: number) => {
-    e.preventDefault();
-    const from = dragIdx.current;
-    if (from === null || from === idx) { setDragOver(null); return; }
-    setForm((f) => {
-      const photos = [...f.photos];
-      const [moved] = photos.splice(from, 1);
-      photos.splice(idx, 0, moved);
-      return { ...f, photos };
-    });
-    dragIdx.current = null;
-    setDragOver(null);
-  }, []);
-
-  const onDragEnd = useCallback(() => {
-    dragIdx.current = null;
-    setDragOver(null);
-  }, []);
+  }
 
   async function rotatePhoto(idx: number) {
     const src = form.photos[idx].split("?")[0];
@@ -339,55 +352,52 @@ export default function ImmobilienAdmin() {
                 {form.photos.map((src, i) => (
                   <div
                     key={src + i}
-                    onDragOver={(e) => onDragOver(e, i)}
-                    onDrop={(e) => onDrop(e, i)}
-                    className={`relative group aspect-square border overflow-hidden transition-all ${
-                      dragOver === i ? "border-anthrazit scale-105 shadow-md" : "border-beige"
+                    data-photo-idx={i}
+                    onPointerDown={(e) => onPhotoPointerDown(i, e)}
+                    className={`relative group aspect-square border overflow-hidden transition-all select-none touch-none ${
+                      dragging !== null ? "cursor-grabbing" : "cursor-grab"
+                    } ${dragging === i ? "opacity-50 scale-95" : ""} ${
+                      dragOver === i && dragging !== i ? "border-anthrazit ring-2 ring-anthrazit" : "border-beige"
                     }`}
                   >
-                    {/* Bild – kein draggable, kein pointer-event */}
                     {/* eslint-disable-next-line @next/next/no-img-element */}
                     <img
                       src={src}
                       alt=""
                       draggable={false}
-                      className="w-full h-full object-cover select-none pointer-events-none"
+                      className="w-full h-full object-cover pointer-events-none select-none"
                     />
 
-                    {/* Transparentes Drag-Overlay (kein Bild → Firefox öffnet nichts) */}
-                    <div
-                      draggable
-                      onDragStart={(e) => onDragStart(e, i)}
-                      onDragEnd={onDragEnd}
-                      className="absolute inset-0 z-10 cursor-grab active:cursor-grabbing"
-                    />
-
-                    {/* Grip-Icon oben rechts */}
-                    <div className="absolute top-1 right-1 z-20 bg-anthrazit-dark/60 text-white p-0.5 opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none">
+                    {/* Grip-Icon */}
+                    <div className="absolute top-1 right-1 z-10 bg-anthrazit-dark/60 text-white p-0.5 opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none">
                       <GripVertical size={12} />
                     </div>
 
-                    {/* Hover-Buttons: Drehen + Löschen (z-20 > Drag-Overlay) */}
-                    <div className="absolute inset-0 z-20 bg-anthrazit-dark/0 group-hover:bg-anthrazit-dark/40 transition-colors flex items-end justify-center gap-1 pb-2 opacity-0 group-hover:opacity-100">
-                      <button
-                        onClick={(e) => { e.stopPropagation(); rotatePhoto(i); }}
-                        disabled={rotating === i}
-                        className="p-1 bg-white/90 hover:bg-white text-anthrazit disabled:opacity-50"
-                        title="90° drehen"
-                      >
-                        <RotateCw size={12} className={rotating === i ? "animate-spin" : ""} />
-                      </button>
-                      <button
-                        onClick={(e) => { e.stopPropagation(); removePhoto(i); }}
-                        className="p-1 bg-white/90 hover:bg-white text-red-500"
-                        title="Löschen"
-                      >
-                        <Trash2 size={12} />
-                      </button>
-                    </div>
+                    {/* Buttons: nur sichtbar wenn NICHT gerade gezogen wird */}
+                    {dragging === null && (
+                      <div className="absolute inset-0 z-10 bg-anthrazit-dark/0 group-hover:bg-anthrazit-dark/40 transition-colors flex items-end justify-center gap-1 pb-2 opacity-0 group-hover:opacity-100">
+                        <button
+                          onPointerDown={(e) => e.stopPropagation()}
+                          onClick={() => rotatePhoto(i)}
+                          disabled={rotating === i}
+                          className="p-1 bg-white/90 hover:bg-white text-anthrazit disabled:opacity-50"
+                          title="90° drehen"
+                        >
+                          <RotateCw size={12} className={rotating === i ? "animate-spin" : ""} />
+                        </button>
+                        <button
+                          onPointerDown={(e) => e.stopPropagation()}
+                          onClick={() => removePhoto(i)}
+                          className="p-1 bg-white/90 hover:bg-white text-red-500"
+                          title="Löschen"
+                        >
+                          <Trash2 size={12} />
+                        </button>
+                      </div>
+                    )}
 
                     {i === 0 && (
-                      <span className="absolute top-1 left-1 z-20 bg-anthrazit-dark/70 text-white text-[9px] px-1.5 py-0.5 pointer-events-none">Titelbild</span>
+                      <span className="absolute top-1 left-1 z-10 bg-anthrazit-dark/70 text-white text-[9px] px-1.5 py-0.5 pointer-events-none">Titelbild</span>
                     )}
                   </div>
                 ))}
