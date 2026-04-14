@@ -19,6 +19,9 @@ const jost = Jost({
 });
 
 export const metadata: Metadata = {
+  metadataBase: new URL(
+    process.env.NEXT_PUBLIC_SITE_URL ?? "https://vandelejk-immobilien.de"
+  ),
   title: {
     default: "VandeLejk Immobilien – Vanessa Lejk",
     template: "%s · VandeLejk Immobilien",
@@ -29,6 +32,38 @@ export const metadata: Metadata = {
     siteName: "VandeLejk Immobilien",
     locale: "de_DE",
     type: "website",
+    images: [
+      {
+        url: "/images/immobilien/cta-background.jpg",
+        width: 1200,
+        height: 800,
+        alt: "VandeLejk Immobilien – Immobilienmaklerin Vanessa Lejk in Hilden",
+      },
+    ],
+  },
+};
+
+const jsonLd = {
+  "@context": "https://schema.org",
+  "@type": ["LocalBusiness", "RealEstateAgent"],
+  name: "VandeLejk Immobilien",
+  description:
+    "Persönliche Immobilienberatung in Hilden und Umgebung. Kaufen, verkaufen, vermieten – mit Herz, Expertise und echtem Engagement.",
+  url: "https://vandelejk-immobilien.de",
+  email: "kontakt@vandelejk-immobilien.de",
+  address: {
+    "@type": "PostalAddress",
+    streetAddress: "Niedenstraße 113",
+    addressLocality: "Hilden",
+    postalCode: "40721",
+    addressCountry: "DE",
+  },
+  areaServed: ["Hilden", "Düsseldorf", "Ratingen", "Langenfeld", "Erkrath"],
+  serviceType: "Immobilienmakler",
+  employee: {
+    "@type": "Person",
+    name: "Vanessa Lejk",
+    jobTitle: "Immobilienmaklerin",
   },
 };
 
@@ -42,6 +77,10 @@ export default function RootLayout({
     >
       <head>
         <link rel="icon" href="/favicon.png" type="image/png" />
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+        />
       </head>
       <body className="min-h-screen flex flex-col">
         <ConditionalLayout>{children}</ConditionalLayout>

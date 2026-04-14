@@ -37,6 +37,15 @@ rsync -avz --delete \
   --exclude='data' \
   ./ "${SSH_USER}@${SSH_HOST}:${REMOTE_PATH}/"
 
+echo "▶ Site-URL in .env.local setzen..."
+ssh "${SSH_USER}@${SSH_HOST}" "bash -s" << ENDSSH
+  cd "${REMOTE_PATH}"
+  grep -qxF "NEXT_PUBLIC_SITE_URL=${URL}" .env.local 2>/dev/null || {
+    sed -i '/^NEXT_PUBLIC_SITE_URL=/d' .env.local 2>/dev/null; true
+    echo "NEXT_PUBLIC_SITE_URL=${URL}" >> .env.local
+  }
+ENDSSH
+
 echo "▶ Auf Server installieren & bauen..."
 ssh "${SSH_USER}@${SSH_HOST}" "bash -s" << ENDSSH
   export PATH=\$HOME/.npm-global/bin:/opt/plesk/node/25/bin:\$PATH
