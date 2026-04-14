@@ -200,8 +200,8 @@ export default function AngebotPage() {
             {/* Bild */}
             <div className="relative min-h-[400px]">
               <Image
-                src="/images/vanessa/vanessa-door.jpg"
-                alt="Vanessa Lejk"
+                src="/images/vanessa/vanessa-angebot.jpg"
+                alt="Vanessa Lejk – Immobilienmaklerin"
                 fill
                 className="object-cover object-top"
                 quality={90}
