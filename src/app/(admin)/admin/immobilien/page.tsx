@@ -4,7 +4,7 @@ import { useEffect, useState, useRef, useCallback } from "react";
 import Image from "next/image";
 import {
   Plus, Pencil, Trash2, Check, X, Eye, EyeOff,
-  Upload, GripVertical
+  Upload, GripVertical, RotateCw
 } from "lucide-react";
 
 type Property = {
@@ -46,7 +46,9 @@ export default function ImmobilienAdmin() {
   const [msg, setMsg]           = useState("");
   const fileRef    = useRef<HTMLInputElement>(null);
   const dragIdx    = useRef<number | null>(null);
-  const [dragOver, setDragOver] = useState<number | null>(null);
+  const [dragOver,       setDragOver]       = useState<number | null>(null);
+  const [photoVersions,  setPhotoVersions]  = useState<Record<string, number>>({});
+  const [rotating,       setRotating]       = useState<number | null>(null);
 
   async function load() {
     const r = await fetch("/api/admin/properties");
@@ -63,6 +65,7 @@ export default function ImmobilienAdmin() {
       floor: p.floor, yearBuilt: p.yearBuilt, description: p.description,
       highlights: p.highlights, photos: p.photos, active: p.active,
     });
+    setPhotoVersions({});
     setMsg("");
   }
 
@@ -70,6 +73,7 @@ export default function ImmobilienAdmin() {
     setEditId("new");
     setForm(EMPTY_FORM);
     setHighlightInput("");
+    setPhotoVersions({});
     setMsg("");
   }
 
@@ -167,6 +171,23 @@ export default function ImmobilienAdmin() {
     dragIdx.current = null;
     setDragOver(null);
   }, []);
+
+  async function rotatePhoto(idx: number) {
+    const src = form.photos[idx].split("?")[0];
+    setRotating(idx);
+    try {
+      const r = await fetch("/api/admin/property-photos/rotate", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ photoPath: src }),
+      });
+      if (r.ok) {
+        setPhotoVersions((v) => ({ ...v, [src]: Date.now() }));
+      }
+    } finally {
+      setRotating(null);
+    }
+  }
 
   function addHighlight() {
     const v = highlightInput.trim();
@@ -322,16 +343,30 @@ export default function ImmobilienAdmin() {
                       dragOver === i ? "border-anthrazit scale-105 shadow-md" : "border-beige"
                     } ${dragIdx.current === i ? "opacity-40" : ""}`}
                   >
-                    <Image src={src} alt="" fill className="object-cover pointer-events-none" sizes="150px" />
+                    {/* eslint-disable-next-line @next/next/no-img-element */}
+                    <img
+                      src={`${src.split("?")[0]}${photoVersions[src.split("?")[0]] ? "?v=" + photoVersions[src.split("?")[0]] : ""}`}
+                      alt=""
+                      className="w-full h-full object-cover pointer-events-none"
+                    />
                     {/* Drag-Handle */}
                     <div className="absolute top-1 right-1 bg-anthrazit-dark/60 text-white p-0.5 opacity-0 group-hover:opacity-100 transition-opacity">
                       <GripVertical size={12} />
                     </div>
-                    {/* Hover-Overlay: Löschen */}
-                    <div className="absolute inset-0 bg-anthrazit-dark/0 group-hover:bg-anthrazit-dark/40 transition-colors flex items-end justify-center pb-2 opacity-0 group-hover:opacity-100">
+                    {/* Hover-Overlay: Drehen + Löschen */}
+                    <div className="absolute inset-0 bg-anthrazit-dark/0 group-hover:bg-anthrazit-dark/40 transition-colors flex items-end justify-center gap-1 pb-2 opacity-0 group-hover:opacity-100">
+                      <button
+                        onClick={(e) => { e.stopPropagation(); rotatePhoto(i); }}
+                        disabled={rotating === i}
+                        className="p-1 bg-white/90 hover:bg-white text-anthrazit disabled:opacity-50"
+                        title="90° drehen"
+                      >
+                        <RotateCw size={12} className={rotating === i ? "animate-spin" : ""} />
+                      </button>
                       <button
                         onClick={(e) => { e.stopPropagation(); removePhoto(i); }}
                         className="p-1 bg-white/90 hover:bg-white text-red-500"
+                        title="Löschen"
                       >
                         <Trash2 size={12} />
                       </button>
