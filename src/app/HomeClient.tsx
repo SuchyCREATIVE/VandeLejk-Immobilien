@@ -201,7 +201,7 @@ export default function HomeClient() {
               className="px-2 sm:px-6 md:px-16 text-center first:pl-0 last:pr-0"
             >
               <p className="text-xl sm:text-2xl md:text-3xl text-anthrazit-dark mb-1.5">{stat.value}</p>
-              <p className="text-[10px] sm:text-[11px] tracking-[0.2em] sm:tracking-[0.25em] uppercase text-sand">{stat.label}</p>
+              <p className="text-[9px] sm:text-[11px] tracking-[0.1em] sm:tracking-[0.25em] uppercase text-sand leading-tight">{stat.label}</p>
             </motion.div>
           ))}
         </div>
@@ -216,7 +216,7 @@ export default function HomeClient() {
           viewport={{ once: true }}
           className="max-w-3xl mx-auto text-center"
         >
-          <p className="text-[11px] md:text-[13px] tracking-[0.55em] uppercase text-anthrazit-light mb-5">
+          <p className="text-[11px] md:text-[13px] tracking-[0.25em] md:tracking-[0.55em] uppercase text-anthrazit-light mb-5">
             Verlässlich&nbsp;&nbsp;·&nbsp;&nbsp;Transparent&nbsp;&nbsp;·&nbsp;&nbsp;Nah
           </p>
           <h2 className="text-2xl md:text-4xl text-anthrazit-dark leading-snug">

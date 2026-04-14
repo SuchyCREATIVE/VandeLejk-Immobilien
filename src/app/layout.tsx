@@ -73,7 +73,7 @@ export default function RootLayout({
   return (
     <html
       lang="de"
-      className={`${playfair.variable} ${jost.variable}`}
+      className={`${playfair.variable} ${jost.variable} overflow-x-hidden`}
     >
       <head>
         <link rel="icon" href="/favicon.png" type="image/png" />
@@ -82,7 +82,7 @@ export default function RootLayout({
           dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
         />
       </head>
-      <body className="min-h-screen flex flex-col">
+      <body className="min-h-screen flex flex-col overflow-x-hidden">
         <ConditionalLayout>{children}</ConditionalLayout>
       </body>
     </html>
