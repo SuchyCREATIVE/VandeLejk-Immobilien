@@ -354,19 +354,13 @@ export default function ImmobilienAdmin() {
                     key={src + i}
                     data-photo-idx={i}
                     onPointerDown={(e) => onPhotoPointerDown(i, e)}
+                    style={{ backgroundImage: `url(${src})`, backgroundSize: "cover", backgroundPosition: "center" }}
                     className={`relative group aspect-square border overflow-hidden transition-all select-none touch-none ${
                       dragging !== null ? "cursor-grabbing" : "cursor-grab"
                     } ${dragging === i ? "opacity-50 scale-95" : ""} ${
                       dragOver === i && dragging !== i ? "border-anthrazit ring-2 ring-anthrazit" : "border-beige"
                     }`}
                   >
-                    {/* eslint-disable-next-line @next/next/no-img-element */}
-                    <img
-                      src={src}
-                      alt=""
-                      draggable={false}
-                      className="w-full h-full object-cover pointer-events-none select-none"
-                    />
 
                     {/* Grip-Icon */}
                     <div className="absolute top-1 right-1 z-10 bg-anthrazit-dark/60 text-white p-0.5 opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none">
