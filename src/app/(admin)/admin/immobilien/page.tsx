@@ -178,7 +178,7 @@ export default function ImmobilienAdmin() {
   }, []);
 
   function onPhotoPointerDown(idx: number, e: React.PointerEvent<HTMLDivElement>) {
-    e.preventDefault(); // verhindert Browser-Standard-Drag (Bild öffnen in Firefox)
+    e.stopPropagation();
     draggingRef.current = idx;
     setDragging(idx);
     setDragOver(idx);
