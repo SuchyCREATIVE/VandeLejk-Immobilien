@@ -32,9 +32,9 @@ export default function Footer() {
     <footer className="bg-anthrazit-dark text-white/60">
       <div className="max-w-6xl mx-auto px-6 py-20">
         {/* Main grid */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-12 mb-16">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-12 mb-16 text-center md:text-left">
           {/* Brand */}
-          <div>
+          <div className="flex flex-col items-center md:items-start">
             <Image
               src="/logo/VandeLejk-Logo-white.svg"
               alt="VandeLejk Immobilien"
@@ -114,7 +114,7 @@ export default function Footer() {
         </div>
 
         {/* Bottom bar */}
-        <div className="border-t border-white/10 pt-8 flex flex-col md:flex-row justify-between items-center gap-5 text-[11px]">
+        <div className="border-t border-white/10 pt-8 flex flex-col items-center md:flex-row md:justify-between gap-5 text-[11px] text-center">
           <p>© {new Date().getFullYear()} VandeLejk Immobilien</p>
 
           <div className="flex gap-6">
