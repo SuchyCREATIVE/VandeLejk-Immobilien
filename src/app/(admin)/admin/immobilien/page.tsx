@@ -339,28 +339,36 @@ export default function ImmobilienAdmin() {
                 {form.photos.map((src, i) => (
                   <div
                     key={src + i}
-                    draggable
-                    onDragStart={(e) => onDragStart(e, i)}
                     onDragOver={(e) => onDragOver(e, i)}
                     onDrop={(e) => onDrop(e, i)}
-                    onDragEnd={onDragEnd}
-                    className={`relative group aspect-square border overflow-hidden cursor-grab active:cursor-grabbing transition-all ${
+                    className={`relative group aspect-square border overflow-hidden transition-all ${
                       dragOver === i ? "border-anthrazit scale-105 shadow-md" : "border-beige"
-                    } ${dragIdx.current === i ? "opacity-40" : ""}`}
+                    }`}
                   >
+                    {/* Bild – kein draggable, kein pointer-event */}
                     {/* eslint-disable-next-line @next/next/no-img-element */}
                     <img
                       src={src}
                       alt=""
                       draggable={false}
-                      className="w-full h-full object-cover pointer-events-none select-none"
+                      className="w-full h-full object-cover select-none pointer-events-none"
                     />
-                    {/* Drag-Handle */}
-                    <div className="absolute top-1 right-1 bg-anthrazit-dark/60 text-white p-0.5 opacity-0 group-hover:opacity-100 transition-opacity">
+
+                    {/* Transparentes Drag-Overlay (kein Bild → Firefox öffnet nichts) */}
+                    <div
+                      draggable
+                      onDragStart={(e) => onDragStart(e, i)}
+                      onDragEnd={onDragEnd}
+                      className="absolute inset-0 z-10 cursor-grab active:cursor-grabbing"
+                    />
+
+                    {/* Grip-Icon oben rechts */}
+                    <div className="absolute top-1 right-1 z-20 bg-anthrazit-dark/60 text-white p-0.5 opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none">
                       <GripVertical size={12} />
                     </div>
-                    {/* Hover-Overlay: Drehen + Löschen */}
-                    <div className="absolute inset-0 bg-anthrazit-dark/0 group-hover:bg-anthrazit-dark/40 transition-colors flex items-end justify-center gap-1 pb-2 opacity-0 group-hover:opacity-100">
+
+                    {/* Hover-Buttons: Drehen + Löschen (z-20 > Drag-Overlay) */}
+                    <div className="absolute inset-0 z-20 bg-anthrazit-dark/0 group-hover:bg-anthrazit-dark/40 transition-colors flex items-end justify-center gap-1 pb-2 opacity-0 group-hover:opacity-100">
                       <button
                         onClick={(e) => { e.stopPropagation(); rotatePhoto(i); }}
                         disabled={rotating === i}
@@ -377,8 +385,9 @@ export default function ImmobilienAdmin() {
                         <Trash2 size={12} />
                       </button>
                     </div>
+
                     {i === 0 && (
-                      <span className="absolute top-1 left-1 bg-anthrazit-dark/70 text-white text-[9px] px-1.5 py-0.5">Titelbild</span>
+                      <span className="absolute top-1 left-1 z-20 bg-anthrazit-dark/70 text-white text-[9px] px-1.5 py-0.5 pointer-events-none">Titelbild</span>
                     )}
                   </div>
                 ))}
