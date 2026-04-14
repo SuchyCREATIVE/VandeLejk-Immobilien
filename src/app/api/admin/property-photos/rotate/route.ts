@@ -14,18 +14,23 @@ export async function POST(req: NextRequest) {
   }
 
   const cleanPath = photoPath.split("?")[0];
-  const diskPath = path.join(process.cwd(), "public", cleanPath);
+
+  // Pfad kann /uploads/... oder /api/uploads/... sein
+  const normalizedPath = cleanPath.startsWith("/api/uploads/")
+    ? cleanPath.replace("/api/uploads/", "/uploads/")
+    : cleanPath;
+
+  const diskPath = path.join(process.cwd(), "public", normalizedPath);
   if (!diskPath.startsWith(path.join(process.cwd(), "public"))) {
     return NextResponse.json({ error: "Ungültiger Pfad" }, { status: 400 });
   }
 
-  // Neuen Dateinamen mit Timestamp generieren → Next.js Image-Cache wird umgangen
-  const ext  = path.extname(cleanPath);
-  const base = path.basename(cleanPath, ext);
-  const dir  = path.dirname(cleanPath);
-  const newName    = `${base}-r${Date.now()}${ext}`;
-  const newWebPath = `${dir}/${newName}`;
-  const newDiskPath = path.join(process.cwd(), "public", newWebPath);
+  const ext  = path.extname(normalizedPath);
+  const base = path.basename(normalizedPath, ext);
+  const dir  = path.dirname(normalizedPath);
+  const newName     = `${base}-r${Date.now()}${ext}`;
+  const newDiskPath = path.join(process.cwd(), "public", dir, newName);
+  const newWebPath  = `/api/uploads/${dir.replace(/^\/?uploads\//, "")}/${newName}`;
 
   await sharp(diskPath).rotate(90).toFile(newDiskPath);
 

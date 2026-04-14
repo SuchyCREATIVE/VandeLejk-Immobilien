@@ -25,7 +25,7 @@ export async function POST(req: NextRequest) {
     const bytes = await file.arrayBuffer();
     const dest = path.join(uploadDir, name);
     await writeFile(dest, Buffer.from(bytes));
-    paths.push(`/uploads/properties/${name}`);
+    paths.push(`/api/uploads/properties/${name}`);
   }
 
   return NextResponse.json({ paths });
