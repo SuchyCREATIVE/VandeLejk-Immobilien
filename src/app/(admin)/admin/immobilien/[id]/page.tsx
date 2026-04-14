@@ -35,10 +35,21 @@ export default function ImmobilieEditPage() {
   const fileRef = useRef<HTMLInputElement>(null);
 
   // ── Custom Drag State ─────────────────────────────────────
-  const [dragOver, setDragOver]   = useState<number | null>(null);
+  const [dragOver, setDragOver]     = useState<number | null>(null);
   const [isDragging, setIsDragging] = useState(false);
-  const ghostRef  = useRef<HTMLDivElement>(null);
-  const dragState = useRef<{ from: number } | null>(null);
+  const ghostRef   = useRef<HTMLDivElement>(null);
+  const tileRefs   = useRef<(HTMLDivElement | null)[]>([]);
+  const dragFromRef = useRef<number | null>(null);
+
+  function tileAtPoint(x: number, y: number): number | null {
+    for (let i = 0; i < tileRefs.current.length; i++) {
+      const el = tileRefs.current[i];
+      if (!el) continue;
+      const r = el.getBoundingClientRect();
+      if (x >= r.left && x <= r.right && y >= r.top && y <= r.bottom) return i;
+    }
+    return null;
+  }
 
   useEffect(() => {
     if (isNew) return;
@@ -120,13 +131,13 @@ export default function ImmobilieEditPage() {
     if (v) { setForm((f) => ({ ...f, highlights: [...f.highlights, v] })); setHighlightInput(""); }
   }
 
-  // ── Custom Drag (kein HTML5 DnD API, kein Pointer-Events API) ──────────
-  // Funktioniert in Chrome, Firefox, Safari – egal ob Bilder oder nicht
-  function startDrag(idx: number, e: React.MouseEvent<HTMLDivElement>) {
-    if ((e.target as HTMLElement).closest("button")) return; // Button-Klicks ignorieren
+  // ── Custom Drag – getBoundingClientRect, kein HTML5/Pointer-API ──────────
+  function startDrag(idx: number, e: React.PointerEvent<HTMLDivElement>) {
+    if ((e.target as HTMLElement).closest("button")) return;
 
-    dragState.current = { from: idx };
+    dragFromRef.current = idx;
     setIsDragging(true);
+    setDragOver(idx);
 
     const ghost = ghostRef.current!;
     ghost.style.backgroundImage = `url(${form.photos[idx]})`;
@@ -134,24 +145,19 @@ export default function ImmobilieEditPage() {
     ghost.style.top  = `${e.clientY - 40}px`;
     ghost.style.display = "block";
 
-    function onMove(ev: MouseEvent) {
+    function onMove(ev: PointerEvent) {
       ghost.style.left = `${ev.clientX - 40}px`;
       ghost.style.top  = `${ev.clientY - 40}px`;
-      // Ghost hat pointer-events:none → elementFromPoint schaut durch ihn durch
-      const el   = document.elementFromPoint(ev.clientX, ev.clientY);
-      const tile = el?.closest("[data-idx]") as HTMLElement | null;
-      setDragOver(tile ? Number(tile.dataset.idx) : null);
+      setDragOver(tileAtPoint(ev.clientX, ev.clientY));
     }
 
-    function onUp(ev: MouseEvent) {
-      document.removeEventListener("mousemove", onMove);
-      document.removeEventListener("mouseup",   onUp);
+    function onUp(ev: PointerEvent) {
+      document.removeEventListener("pointermove", onMove);
+      document.removeEventListener("pointerup",   onUp);
       ghost.style.display = "none";
 
-      const el   = document.elementFromPoint(ev.clientX, ev.clientY);
-      const tile = el?.closest("[data-idx]") as HTMLElement | null;
-      const to   = tile ? Number(tile.dataset.idx) : null;
-      const from = dragState.current?.from ?? null;
+      const to   = tileAtPoint(ev.clientX, ev.clientY);
+      const from = dragFromRef.current;
 
       if (from !== null && to !== null && from !== to) {
         setForm((f) => {
@@ -161,13 +167,13 @@ export default function ImmobilieEditPage() {
           return { ...f, photos };
         });
       }
-      dragState.current = null;
+      dragFromRef.current = null;
       setIsDragging(false);
       setDragOver(null);
     }
 
-    document.addEventListener("mousemove", onMove);
-    document.addEventListener("mouseup",   onUp);
+    document.addEventListener("pointermove", onMove);
+    document.addEventListener("pointerup",   onUp);
   }
 
   if (loading) return <div className="p-10 text-sm text-anthrazit-light">Lädt…</div>;
@@ -319,8 +325,8 @@ export default function ImmobilieEditPage() {
               {form.photos.map((src, i) => (
                 <div
                   key={src}
-                  data-idx={i}
-                  onMouseDown={(e) => startDrag(i, e)}
+                  ref={(el) => { tileRefs.current[i] = el; }}
+                  onPointerDown={(e) => startDrag(i, e)}
                   style={{
                     backgroundImage: `url(${src})`,
                     backgroundSize: "cover",
@@ -329,7 +335,7 @@ export default function ImmobilieEditPage() {
                   className={[
                     "relative group aspect-square border select-none transition-all",
                     isDragging ? "cursor-grabbing" : "cursor-grab",
-                    dragOver === i && dragState.current?.from !== i
+                    dragOver === i && dragFromRef.current !== i
                       ? "ring-2 ring-anthrazit border-anthrazit"
                       : "border-beige",
                   ].join(" ")}
