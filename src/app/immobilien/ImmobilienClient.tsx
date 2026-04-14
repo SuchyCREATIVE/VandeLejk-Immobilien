@@ -83,13 +83,15 @@ function Gallery({ photos, address, city }: { photos: string[]; address: string;
 
         <button
           onClick={(e) => { e.stopPropagation(); setActive(prev(active)); }}
-          className="absolute left-3 top-1/2 -translate-y-1/2 w-9 h-9 bg-white/80 flex items-center justify-center hover:bg-white transition-colors"
+          className="absolute left-3 top-1/2 -translate-y-1/2 w-11 h-11 bg-white/80 flex items-center justify-center hover:bg-white transition-colors"
+          aria-label="Vorheriges Foto"
         >
           <ChevronLeft size={18} className="text-anthrazit" />
         </button>
         <button
           onClick={(e) => { e.stopPropagation(); setActive(next(active)); }}
-          className="absolute right-3 top-1/2 -translate-y-1/2 w-9 h-9 bg-white/80 flex items-center justify-center hover:bg-white transition-colors"
+          className="absolute right-3 top-1/2 -translate-y-1/2 w-11 h-11 bg-white/80 flex items-center justify-center hover:bg-white transition-colors"
+          aria-label="Nächstes Foto"
         >
           <ChevronRight size={18} className="text-anthrazit" />
         </button>
@@ -122,12 +124,13 @@ function Gallery({ photos, address, city }: { photos: string[]; address: string;
             className="fixed inset-0 z-50 bg-black/90 flex items-center justify-center p-4"
             onClick={() => setLightbox(null)}
           >
-            <button onClick={() => setLightbox(null)} className="absolute top-4 right-4 text-white/70 hover:text-white">
+            <button onClick={() => setLightbox(null)} className="absolute top-4 right-4 w-11 h-11 flex items-center justify-center text-white/70 hover:text-white" aria-label="Schließen">
               <X size={24} />
             </button>
             <button
               onClick={(e) => { e.stopPropagation(); setLightbox(prev(lightbox)); }}
-              className="absolute left-4 top-1/2 -translate-y-1/2 text-white/70 hover:text-white"
+              className="absolute left-4 top-1/2 -translate-y-1/2 w-11 h-11 flex items-center justify-center text-white/70 hover:text-white"
+              aria-label="Vorheriges Foto"
             >
               <ChevronLeft size={36} />
             </button>
@@ -146,7 +149,8 @@ function Gallery({ photos, address, city }: { photos: string[]; address: string;
             </div>
             <button
               onClick={(e) => { e.stopPropagation(); setLightbox(next(lightbox)); }}
-              className="absolute right-4 top-1/2 -translate-y-1/2 text-white/70 hover:text-white"
+              className="absolute right-4 top-1/2 -translate-y-1/2 w-11 h-11 flex items-center justify-center text-white/70 hover:text-white"
+              aria-label="Nächstes Foto"
             >
               <ChevronRight size={36} />
             </button>

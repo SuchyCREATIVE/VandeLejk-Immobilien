@@ -210,8 +210,8 @@ export default function AngebotPage() {
             </div>
 
             {/* Text */}
-            <div className="bg-anthrazit-dark flex flex-col justify-center px-10 py-14">
-              <p className="text-[9px] tracking-[0.4em] uppercase text-white/30 mb-6">
+            <div className="bg-anthrazit-dark flex flex-col justify-center px-6 sm:px-10 py-14">
+              <p className="text-[11px] tracking-[0.4em] uppercase text-white/50 mb-6">
                 Mein Versprechen
               </p>
               <blockquote className="text-2xl md:text-3xl text-white leading-[1.35] mb-8">
@@ -225,7 +225,7 @@ export default function AngebotPage() {
                 das sind die Werte, die meine Arbeit prägen. Jedes Objekt,
                 jeder Kunde ist einzigartig.
               </p>
-              <p className="mt-6 text-[11px] tracking-[0.15em] uppercase text-white/40">
+              <p className="mt-6 text-[11px] tracking-[0.15em] uppercase text-white/60">
                 Vanessa Lejk · Immobilienmaklerin
               </p>
             </div>

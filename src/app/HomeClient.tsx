@@ -133,7 +133,7 @@ export default function HomeClient() {
           </motion.p>
           <motion.h1
             variants={fadeUp(0.12)} initial="hidden" animate="visible"
-            className="text-5xl md:text-6xl xl:text-7xl leading-[1.1] text-white mb-6 [text-shadow:0_2px_24px_rgba(0,0,0,0.35)]"
+            className="text-4xl sm:text-5xl md:text-6xl xl:text-7xl leading-[1.1] text-white mb-6 [text-shadow:0_2px_24px_rgba(0,0,0,0.35)]"
           >
             Ihr Zuhause.<br />
             <em className="italic text-white/90">Meine Leidenschaft.</em>
@@ -172,9 +172,9 @@ export default function HomeClient() {
 
         <motion.div
           variants={fadeIn(0.8)} initial="hidden" animate="visible"
-          className="absolute bottom-8 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2 text-white/40"
+          className="absolute bottom-8 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2 text-white/60"
         >
-          <span className="text-[9px] tracking-[0.3em] uppercase">Entdecken</span>
+          <span className="text-[11px] tracking-[0.3em] uppercase">Entdecken</span>
           <motion.div
             animate={{ y: [0, 6, 0] }}
             transition={{ duration: 1.8, repeat: Infinity, ease: "easeInOut" }}
@@ -188,7 +188,7 @@ export default function HomeClient() {
           STATS STRIP
       ══════════════════════════════════════════════════════════ */}
       <section className="bg-white border-b border-sand/20">
-        <div className="max-w-5xl mx-auto px-6 py-10 grid grid-cols-3 divide-x divide-sand/25">
+        <div className="max-w-5xl mx-auto px-4 sm:px-6 py-8 sm:py-10 grid grid-cols-3 divide-x divide-sand/25">
           {[
             { value: `${totalRatings}`,           label: "Google-Bewertungen" },
             { value: `${rating.toFixed(1)}\u00a0★`, label: "Ø Bewertung" },
@@ -198,10 +198,10 @@ export default function HomeClient() {
               key={stat.label}
               variants={fadeUp(i * 0.08)} initial="hidden" whileInView="visible"
               viewport={{ once: true }}
-              className="px-6 md:px-16 text-center first:pl-0 last:pr-0"
+              className="px-2 sm:px-6 md:px-16 text-center first:pl-0 last:pr-0"
             >
-              <p className="text-2xl md:text-3xl text-anthrazit-dark mb-1.5">{stat.value}</p>
-              <p className="text-[9px] tracking-[0.25em] uppercase text-sand">{stat.label}</p>
+              <p className="text-xl sm:text-2xl md:text-3xl text-anthrazit-dark mb-1.5">{stat.value}</p>
+              <p className="text-[10px] sm:text-[11px] tracking-[0.2em] sm:tracking-[0.25em] uppercase text-sand">{stat.label}</p>
             </motion.div>
           ))}
         </div>
@@ -292,7 +292,7 @@ export default function HomeClient() {
             />
             {/* Floating Label */}
             <div className="absolute bottom-8 left-8 bg-white/90 backdrop-blur-sm px-5 py-3">
-              <p className="text-[9px] tracking-[0.3em] uppercase text-sand mb-0.5">Vanessa Lejk</p>
+              <p className="text-[11px] tracking-[0.3em] uppercase text-sand mb-0.5">Vanessa Lejk</p>
               <p className="text-sm text-anthrazit-dark">Inhaberin · Immobilienmaklerin</p>
             </div>
           </motion.div>
@@ -301,7 +301,7 @@ export default function HomeClient() {
           <motion.div
             variants={fadeUp(0.12)} initial="hidden" whileInView="visible"
             viewport={{ once: true }}
-            className="flex flex-col justify-center px-10 md:px-14 xl:px-20 py-28 lg:py-40 bg-white"
+            className="flex flex-col justify-center px-6 md:px-14 xl:px-20 py-16 lg:py-40 bg-white"
           >
             <p className="text-[10px] tracking-[0.35em] uppercase text-sand mb-6">
               Über mich
@@ -552,7 +552,7 @@ export default function HomeClient() {
             <motion.div
               variants={fadeUp(0.1)} initial="hidden" whileInView="visible"
               viewport={{ once: true }}
-              className="bg-white px-10 py-12 md:py-14 max-w-md w-full"
+              className="bg-white px-6 sm:px-10 py-10 sm:py-12 md:py-14 max-w-md w-full"
             >
               <p className="text-[10px] tracking-[0.35em] uppercase text-sand mb-5">
                 Ihr nächster Schritt
