@@ -25,6 +25,9 @@ export const metadata: Metadata = {
   },
   description:
     "Persönliche Immobilienberatung in Hilden und Umgebung. Kaufen, verkaufen, vermieten – mit Herz, Expertise und echtem Engagement.",
+  icons: {
+    icon: "/favicon.png",
+  },
   openGraph: {
     siteName: "VandeLejk Immobilien",
     locale: "de_DE",
