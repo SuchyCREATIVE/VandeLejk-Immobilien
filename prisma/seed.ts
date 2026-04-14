@@ -91,12 +91,11 @@ async function main() {
     sortOrder: 0,
   };
   const existingProp = await prisma.property.findFirst({ where: { address: "Röpkestraße 51" } });
-  if (existingProp) {
-    await prisma.property.update({ where: { id: existingProp.id }, data: { photos: roepkePhotos } });
-    console.log("✓ Fotos Röpkestraße 51 aktualisiert");
-  } else {
+  if (!existingProp) {
     await prisma.property.create({ data: roepkeData });
     console.log("✓ Beispiel-Objekt Röpkestraße 51 angelegt");
+  } else {
+    console.log("– Röpkestraße 51 existiert bereits, übersprungen");
   }
 
   // ─── Luxusvilla Im Diepental ──────────────────────────────
@@ -144,8 +143,7 @@ async function main() {
     await prisma.property.create({ data: benrathData });
     console.log("✓ Luxusvilla Im Diepental 18 angelegt");
   } else {
-    await prisma.property.update({ where: { id: existingBenrath.id }, data: { photos: benrathPhotos } });
-    console.log("✓ Fotos Im Diepental 18 aktualisiert");
+    console.log("– Im Diepental 18 existiert bereits, übersprungen");
   }
 
   // ─── Beispiel-Kundenstimmen ───────────────────────────────

@@ -1,10 +1,10 @@
 "use client";
 
-import { useEffect, useState, useRef } from "react";
+import { useEffect, useState, useRef, useCallback } from "react";
 import Image from "next/image";
 import {
   Plus, Pencil, Trash2, Check, X, Eye, EyeOff,
-  Upload, GripVertical, ChevronLeft, ChevronRight
+  Upload, GripVertical
 } from "lucide-react";
 
 type Property = {
@@ -44,7 +44,9 @@ export default function ImmobilienAdmin() {
   const [saving, setSaving]     = useState(false);
   const [uploading, setUploading] = useState(false);
   const [msg, setMsg]           = useState("");
-  const fileRef = useRef<HTMLInputElement>(null);
+  const fileRef    = useRef<HTMLInputElement>(null);
+  const dragIdx    = useRef<number | null>(null);
+  const [dragOver, setDragOver] = useState<number | null>(null);
 
   async function load() {
     const r = await fetch("/api/admin/properties");
@@ -137,6 +139,34 @@ export default function ImmobilienAdmin() {
     [photos[idx], photos[target]] = [photos[target], photos[idx]];
     setForm((f) => ({ ...f, photos }));
   }
+
+  const onDragStart = useCallback((idx: number) => {
+    dragIdx.current = idx;
+  }, []);
+
+  const onDragOver = useCallback((e: React.DragEvent, idx: number) => {
+    e.preventDefault();
+    setDragOver(idx);
+  }, []);
+
+  const onDrop = useCallback((e: React.DragEvent, idx: number) => {
+    e.preventDefault();
+    const from = dragIdx.current;
+    if (from === null || from === idx) { setDragOver(null); return; }
+    setForm((f) => {
+      const photos = [...f.photos];
+      const [moved] = photos.splice(from, 1);
+      photos.splice(idx, 0, moved);
+      return { ...f, photos };
+    });
+    dragIdx.current = null;
+    setDragOver(null);
+  }, []);
+
+  const onDragEnd = useCallback(() => {
+    dragIdx.current = null;
+    setDragOver(null);
+  }, []);
 
   function addHighlight() {
     const v = highlightInput.trim();
@@ -281,17 +311,29 @@ export default function ImmobilienAdmin() {
             {form.photos.length > 0 && (
               <div className="grid grid-cols-4 gap-2">
                 {form.photos.map((src, i) => (
-                  <div key={i} className="relative group aspect-square border border-beige overflow-hidden">
-                    <Image src={src} alt="" fill className="object-cover" sizes="150px" />
-                    <div className="absolute inset-0 bg-anthrazit-dark/0 group-hover:bg-anthrazit-dark/50 transition-colors flex items-center justify-center gap-1 opacity-0 group-hover:opacity-100">
-                      <button onClick={() => movePhoto(i, "left")} disabled={i === 0} className="p-1 bg-white/80 hover:bg-white disabled:opacity-30">
-                        <ChevronLeft size={12} />
-                      </button>
-                      <button onClick={() => removePhoto(i)} className="p-1 bg-white/80 hover:bg-white text-red-500">
+                  <div
+                    key={src + i}
+                    draggable
+                    onDragStart={() => onDragStart(i)}
+                    onDragOver={(e) => onDragOver(e, i)}
+                    onDrop={(e) => onDrop(e, i)}
+                    onDragEnd={onDragEnd}
+                    className={`relative group aspect-square border overflow-hidden cursor-grab active:cursor-grabbing transition-all ${
+                      dragOver === i ? "border-anthrazit scale-105 shadow-md" : "border-beige"
+                    } ${dragIdx.current === i ? "opacity-40" : ""}`}
+                  >
+                    <Image src={src} alt="" fill className="object-cover pointer-events-none" sizes="150px" />
+                    {/* Drag-Handle */}
+                    <div className="absolute top-1 right-1 bg-anthrazit-dark/60 text-white p-0.5 opacity-0 group-hover:opacity-100 transition-opacity">
+                      <GripVertical size={12} />
+                    </div>
+                    {/* Hover-Overlay: Löschen */}
+                    <div className="absolute inset-0 bg-anthrazit-dark/0 group-hover:bg-anthrazit-dark/40 transition-colors flex items-end justify-center pb-2 opacity-0 group-hover:opacity-100">
+                      <button
+                        onClick={(e) => { e.stopPropagation(); removePhoto(i); }}
+                        className="p-1 bg-white/90 hover:bg-white text-red-500"
+                      >
                         <Trash2 size={12} />
-                      </button>
-                      <button onClick={() => movePhoto(i, "right")} disabled={i === form.photos.length - 1} className="p-1 bg-white/80 hover:bg-white disabled:opacity-30">
-                        <ChevronRight size={12} />
                       </button>
                     </div>
                     {i === 0 && (
