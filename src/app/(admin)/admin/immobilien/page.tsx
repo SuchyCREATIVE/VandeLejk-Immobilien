@@ -48,7 +48,7 @@ export default function ImmobilienAdmin() {
   const [dragging,  setDragging]  = useState<number | null>(null);
   const [dragOver,  setDragOver]  = useState<number | null>(null);
   const [rotating,  setRotating]  = useState<number | null>(null);
-  const draggingRef = useRef<number | null>(null);
+  const dragIdx    = useRef<number | null>(null);
 
   async function load() {
     const r = await fetch("/api/admin/properties");
@@ -142,46 +142,35 @@ export default function ImmobilienAdmin() {
     setForm((f) => ({ ...f, photos }));
   }
 
-  // Pointer-Event DnD mit elementFromPoint – funktioniert in Chrome, Firefox, Safari
-  useEffect(() => {
-    function onPointerMove(e: PointerEvent) {
-      if (draggingRef.current === null) return;
-      const el = document.elementFromPoint(e.clientX, e.clientY);
-      const tile = el?.closest("[data-photo-idx]") as HTMLElement | null;
-      const idx = tile ? parseInt(tile.dataset.photoIdx!) : null;
-      setDragOver(idx);
-    }
-    function onPointerUp(e: PointerEvent) {
-      if (draggingRef.current === null) return;
-      const el = document.elementFromPoint(e.clientX, e.clientY);
-      const tile = el?.closest("[data-photo-idx]") as HTMLElement | null;
-      const targetIdx = tile ? parseInt(tile.dataset.photoIdx!) : null;
-      const fromIdx = draggingRef.current;
-      if (targetIdx !== null && targetIdx !== fromIdx) {
-        setForm((f) => {
-          const photos = [...f.photos];
-          const [moved] = photos.splice(fromIdx, 1);
-          photos.splice(targetIdx, 0, moved);
-          return { ...f, photos };
-        });
-      }
-      draggingRef.current = null;
-      setDragging(null);
-      setDragOver(null);
-    }
-    document.addEventListener("pointermove", onPointerMove);
-    document.addEventListener("pointerup", onPointerUp);
-    return () => {
-      document.removeEventListener("pointermove", onPointerMove);
-      document.removeEventListener("pointerup", onPointerUp);
-    };
-  }, []);
-
-  function onPhotoPointerDown(idx: number, e: React.PointerEvent<HTMLDivElement>) {
-    e.stopPropagation();
-    draggingRef.current = idx;
+  function onDragStart(idx: number) {
+    dragIdx.current = idx;
     setDragging(idx);
+  }
+
+  function onDragOver(idx: number, e: React.DragEvent) {
+    e.preventDefault();
     setDragOver(idx);
+  }
+
+  function onDrop(idx: number) {
+    const from = dragIdx.current;
+    if (from !== null && from !== idx) {
+      setForm((f) => {
+        const photos = [...f.photos];
+        const [moved] = photos.splice(from, 1);
+        photos.splice(idx, 0, moved);
+        return { ...f, photos };
+      });
+    }
+    dragIdx.current = null;
+    setDragging(null);
+    setDragOver(null);
+  }
+
+  function onDragEnd() {
+    dragIdx.current = null;
+    setDragging(null);
+    setDragOver(null);
   }
 
   async function rotatePhoto(idx: number) {
@@ -352,10 +341,13 @@ export default function ImmobilienAdmin() {
                 {form.photos.map((src, i) => (
                   <div
                     key={src + i}
-                    data-photo-idx={i}
-                    onPointerDown={(e) => onPhotoPointerDown(i, e)}
+                    draggable
+                    onDragStart={() => onDragStart(i)}
+                    onDragOver={(e) => onDragOver(i, e)}
+                    onDrop={() => onDrop(i)}
+                    onDragEnd={onDragEnd}
                     style={{ backgroundImage: `url(${src})`, backgroundSize: "cover", backgroundPosition: "center" }}
-                    className={`relative group aspect-square border overflow-hidden transition-all select-none touch-none ${
+                    className={`relative group aspect-square border overflow-hidden transition-all select-none ${
                       dragging !== null ? "cursor-grabbing" : "cursor-grab"
                     } ${dragging === i ? "opacity-50 scale-95" : ""} ${
                       dragOver === i && dragging !== i ? "border-anthrazit ring-2 ring-anthrazit" : "border-beige"
@@ -371,7 +363,6 @@ export default function ImmobilienAdmin() {
                     {dragging === null && (
                       <div className="absolute inset-0 z-10 bg-anthrazit-dark/0 group-hover:bg-anthrazit-dark/40 transition-colors flex items-end justify-center gap-1 pb-2 opacity-0 group-hover:opacity-100">
                         <button
-                          onPointerDown={(e) => e.stopPropagation()}
                           onClick={() => rotatePhoto(i)}
                           disabled={rotating === i}
                           className="p-1 bg-white/90 hover:bg-white text-anthrazit disabled:opacity-50"
@@ -380,7 +371,6 @@ export default function ImmobilienAdmin() {
                           <RotateCw size={12} className={rotating === i ? "animate-spin" : ""} />
                         </button>
                         <button
-                          onPointerDown={(e) => e.stopPropagation()}
                           onClick={() => removePhoto(i)}
                           className="p-1 bg-white/90 hover:bg-white text-red-500"
                           title="Löschen"
