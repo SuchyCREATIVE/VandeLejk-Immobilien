@@ -34,9 +34,9 @@ export const metadata: Metadata = {
     type: "website",
     images: [
       {
-        url: "/images/immobilien/cta-background.jpg",
+        url: "/images/og-image.jpg",
         width: 1200,
-        height: 800,
+        height: 630,
         alt: "VandeLejk Immobilien – Immobilienmaklerin Vanessa Lejk in Hilden",
       },
     ],

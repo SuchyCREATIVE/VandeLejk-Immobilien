@@ -99,6 +99,55 @@ async function main() {
     console.log("✓ Beispiel-Objekt Röpkestraße 51 angelegt");
   }
 
+  // ─── Luxusvilla Im Diepental ──────────────────────────────
+  const benrathPhotos = JSON.stringify([
+    "/images/immobilien/benrath/benrath-01.webp",
+    "/images/immobilien/benrath/benrath-02.webp",
+    "/images/immobilien/benrath/benrath-03.webp",
+    "/images/immobilien/benrath/benrath-04.webp",
+    "/images/immobilien/benrath/benrath-05.webp",
+    "/images/immobilien/benrath/benrath-06.webp",
+    "/images/immobilien/benrath/benrath-07.webp",
+    "/images/immobilien/benrath/benrath-08.webp",
+    "/images/immobilien/benrath/benrath-09.webp",
+    "/images/immobilien/benrath/benrath-10.webp",
+    "/images/immobilien/benrath/benrath-11.webp",
+  ]);
+  const benrathData = {
+    address:     "Im Diepental 18",
+    city:        "40597 Düsseldorf-Benrath",
+    type:        "Einfamilienhaus",
+    status:      "Zu verkaufen",
+    price:       "auf Anfrage",
+    area:        "340 m²",
+    rooms:       7,
+    bathrooms:   3,
+    floor:       "Freistehendes Einfamilienhaus · 3 Etagen",
+    yearBuilt:   "2016",
+    description: "Dieses außergewöhnliche Anwesen in der begehrten Benrather Villenlage vereint zeitgemäße Architektur mit höchstem Wohnkomfort. Auf großzügigen 340 Quadratmetern Wohnfläche entfaltet sich ein durchdachtes Raumkonzept, das keine Wünsche offenlässt.\n\nDas Herzstück des Hauses bildet der lichtdurchflutete Wohn- und Essbereich mit der spektakulären Panoramaverglasung, die einen ungehinderten Blick auf den Rhein freigibt – ein Anblick, der in jeder Jahreszeit beeindruckt. Die offene Designerküche ist mit erstklassigen Geräten ausgestattet und nahtlos in den Wohnbereich integriert.\n\nIm Obergeschoss befinden sich drei großzügige Schlafzimmer, darunter eine herrschaftliche Masterbedroom-Suite mit eigenem Ankleidezimmer und einem Badezimmer in exquisiter Marmorausstattung. Bodenheizung auf allen Etagen sowie ein hauseigener Aufzug sorgen für Komfort auf höchstem Niveau.\n\nDer parkähnliche Garten mit terrassen- und poolbereich rundet dieses seltene Angebot ab. Doppelgarage und drei Außenstellplätze sind selbstverständlich vorhanden.",
+    highlights:  JSON.stringify([
+      "Panoramascheibe mit Rheinblick",
+      "Hauseigener Aufzug",
+      "Badezimmer in Carrara-Marmor",
+      "Fußbodenheizung auf allen Etagen",
+      "Designerküche mit Premiumgeräten",
+      "Pool & Garten mit Rheinblick",
+      "Doppelgarage + 3 Stellplätze",
+      "Masterbedroom-Suite mit Ankleidezimmer",
+    ]),
+    photos:    benrathPhotos,
+    active:    true,
+    sortOrder: 1,
+  };
+  const existingBenrath = await prisma.property.findFirst({ where: { address: "Im Diepental 18" } });
+  if (!existingBenrath) {
+    await prisma.property.create({ data: benrathData });
+    console.log("✓ Luxusvilla Im Diepental 18 angelegt");
+  } else {
+    await prisma.property.update({ where: { id: existingBenrath.id }, data: { photos: benrathPhotos } });
+    console.log("✓ Fotos Im Diepental 18 aktualisiert");
+  }
+
   // ─── Beispiel-Kundenstimmen ───────────────────────────────
   const testCount = await prisma.testimonial.count();
   if (testCount === 0) {
