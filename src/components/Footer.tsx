@@ -41,6 +41,7 @@ export default function Footer() {
               width={148}
               height={42}
               className="mb-5"
+              unoptimized
             />
             <p className="text-sm leading-relaxed mb-6">
               Persönliche Immobilienberatung<br />
