@@ -4,7 +4,7 @@ import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
 import Image from "next/image";
 import Link from "next/link";
-import { ArrowRight, Home, TrendingUp, Key, Star, ChevronDown, MapPin, Phone } from "lucide-react";
+import { ArrowRight, Home, TrendingUp, Key, Star, ChevronDown, Mail, Phone } from "lucide-react";
 
 function IconInstagram({ size = 17 }: { size?: number }) {
   return (
@@ -343,19 +343,18 @@ export default function HomeClient() {
             {/* Kontakt-Snippet */}
             <div className="mt-14 pt-10 border-t border-sand/40 flex flex-col gap-3">
               <a
-                href="https://maps.google.com/?q=Niedenstraße+113+40721+Hilden"
-                target="_blank" rel="noopener noreferrer"
-                className="inline-flex items-center gap-2 text-sm text-anthrazit-light hover:text-anthrazit transition-colors"
-              >
-                <MapPin size={14} className="text-sand shrink-0" />
-                Niedenstraße 113, 40721 Hilden
-              </a>
-              <a
-                href="tel:+49"
+                href="tel:+4915775299523"
                 className="inline-flex items-center gap-2 text-sm text-anthrazit-light hover:text-anthrazit transition-colors"
               >
                 <Phone size={14} className="text-sand shrink-0" />
-                Auf Anfrage
+                0157 752 995 23
+              </a>
+              <a
+                href="mailto:kontakt@vandelejk-immobilien.de"
+                className="inline-flex items-center gap-2 text-sm text-anthrazit-light hover:text-anthrazit transition-colors"
+              >
+                <Mail size={14} className="text-sand shrink-0" />
+                kontakt@vandelejk-immobilien.de
               </a>
             </div>
           </motion.div>

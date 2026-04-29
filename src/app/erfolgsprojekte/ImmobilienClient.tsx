@@ -112,18 +112,20 @@ function Gallery({ photos, city, type }: { photos: string[]; city: string; type:
           {photos.map((src, i) => (
             <button
               key={i}
+              type="button"
               onClick={() => setActive(i)}
-              className={`relative aspect-square overflow-hidden bg-beige ${
+              className={`block relative aspect-square overflow-hidden bg-beige p-0 ${
                 i === active ? "ring-2 ring-anthrazit" : "opacity-60 hover:opacity-100"
               } transition-opacity`}
               aria-label={`Vorschaubild ${i + 1}`}
             >
-              {/* eslint-disable-next-line @next/next/no-img-element */}
-              <img
+              <Image
                 src={src}
                 alt=""
-                loading="lazy"
-                className="absolute inset-0 w-full h-full object-cover"
+                width={200}
+                height={200}
+                unoptimized
+                className="w-full h-full object-cover"
               />
             </button>
           ))}

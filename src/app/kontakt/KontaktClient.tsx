@@ -6,7 +6,7 @@ import Image from "next/image";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
-import { MapPin, Mail, Send, CheckCircle2 } from "lucide-react";
+import { Phone, Mail, Send, CheckCircle2 } from "lucide-react";
 import { fadeUp, VP } from "@/lib/animations";
 
 /* ─── Zod Schema ──────────────────────────────────────────── */
@@ -105,12 +105,11 @@ export default function KontaktPage() {
 
               <div className="space-y-3 mb-8">
                 <a
-                  href="https://maps.google.com/?q=Niedenstraße+113+40721+Hilden"
-                  target="_blank" rel="noopener noreferrer"
+                  href="tel:+4915775299523"
                   className="flex items-start gap-3 text-sm text-anthrazit-light hover:text-anthrazit transition-colors"
                 >
-                  <MapPin size={14} className="text-sand mt-0.5 shrink-0" />
-                  Niedenstraße 113, 40721 Hilden
+                  <Phone size={14} className="text-sand mt-0.5 shrink-0" />
+                  0157 752 995 23
                 </a>
                 <a
                   href="mailto:kontakt@vandelejk-immobilien.de"
