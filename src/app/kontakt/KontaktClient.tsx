@@ -89,7 +89,7 @@ export default function KontaktPage() {
               {/* Portrait */}
               <div className="relative aspect-[3/4] overflow-hidden mb-8">
                 <Image
-                  src="/images/vanessa/vanessa-door.jpg"
+                  src="/images/vanessa/vanessa-door.webp"
                   alt="Vanessa Lejk"
                   fill
                   quality={95}

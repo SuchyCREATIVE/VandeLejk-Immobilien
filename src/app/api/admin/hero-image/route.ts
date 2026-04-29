@@ -11,7 +11,7 @@ export async function GET() {
   if (error) return error;
 
   const setting = await prisma.settings.findUnique({ where: { key: "hero_image" } });
-  return NextResponse.json({ value: setting?.value ?? "/images/hero-building.jpg" });
+  return NextResponse.json({ value: setting?.value ?? "/images/hero-building.webp" });
 }
 
 export async function POST(req: NextRequest) {

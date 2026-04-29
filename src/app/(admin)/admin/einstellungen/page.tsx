@@ -21,7 +21,7 @@ type Settings = {
 
 const DEFAULT: Settings = {
   immobilien_active: true,
-  hero_image: "/images/hero.jpg",
+  hero_image: "/images/hero.webp",
   ueber_mich_text: "",
   kontakt_telefon: "",
   kontakt_email: "",

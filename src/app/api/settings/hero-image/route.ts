@@ -1,7 +1,7 @@
 import { NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
 
-const DEFAULT = "/images/hero-building.jpg";
+const DEFAULT = "/images/hero-building.webp";
 
 export async function GET() {
   try {

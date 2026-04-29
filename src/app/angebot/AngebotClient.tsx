@@ -13,7 +13,7 @@ const SERVICES = [
   {
     icon: Home,
     title: "Kauf von Immobilien",
-    img: "/images/immobilien/interior-main.jpg",
+    img: "/images/immobilien/interior-main.webp",
     description:
       "Sie suchen das passende Zuhause oder eine Kapitalanlage? Ich begleite Sie von der ersten Besichtigung bis zur notariellen Beurkundung – ehrlich, transparent und mit Ihren Interessen im Mittelpunkt.",
     details: [
@@ -27,7 +27,7 @@ const SERVICES = [
   {
     icon: TrendingUp,
     title: "Verkauf von Immobilien",
-    img: "/images/immobilien/cta-background.jpg",
+    img: "/images/immobilien/cta-background.webp",
     description:
       "Sie möchten Ihre Immobilie erfolgreich verkaufen? Mit einer fundierten Marktanalyse, professioneller Vermarktung und persönlichem Einsatz erzielen wir gemeinsam den bestmöglichen Preis.",
     details: [
@@ -100,7 +100,7 @@ export default function AngebotPage() {
       <section className="relative min-h-[65vh] flex items-end overflow-hidden">
         <div className="absolute inset-0">
           <Image
-            src="/images/immobilien/cta-background.jpg"
+            src="/images/immobilien/cta-background.webp"
             alt="VandeLejk Immobilien"
             fill
             className="object-cover object-center"
@@ -200,7 +200,7 @@ export default function AngebotPage() {
             {/* Bild */}
             <div className="relative min-h-[400px]">
               <Image
-                src="/images/vanessa/vanessa-angebot.jpg"
+                src="/images/vanessa/vanessa-angebot.webp"
                 alt="Vanessa Lejk – Immobilienmaklerin"
                 fill
                 className="object-cover object-top"

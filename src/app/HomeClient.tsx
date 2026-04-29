@@ -73,7 +73,7 @@ interface DbTestimonial {
   rating: number;
 }
 
-const DEFAULT_HERO = "/images/hero-building.jpg";
+const DEFAULT_HERO = "/images/hero-building.webp";
 
 export default function HomeClient() {
   const [heroImage,    setHeroImage]    = useState(DEFAULT_HERO);
@@ -283,7 +283,7 @@ export default function HomeClient() {
             className="relative min-h-[560px] lg:min-h-[700px]"
           >
             <Image
-              src="/images/vanessa/vanessa-front.jpg"
+              src="/images/vanessa/vanessa-front.webp"
               quality={90}
               alt="Vanessa Lejk – VandeLejk Immobilien"
               fill
@@ -399,7 +399,7 @@ export default function HomeClient() {
               className="relative aspect-[4/3] overflow-hidden"
             >
               <Image
-                src="/images/immobilien/interior-main.jpg"
+                src="/images/immobilien/interior-main.webp"
                 alt="Immobilien Innenansicht"
                 fill
                 className="object-cover"
@@ -516,7 +516,7 @@ export default function HomeClient() {
         {/* Hintergrund: Immobilien-Foto */}
         <div className="absolute inset-0">
           <Image
-            src="/images/immobilien/cta-background.jpg"
+            src="/images/immobilien/cta-background.webp"
             alt=""
             fill
             className="object-cover object-center"
@@ -537,7 +537,7 @@ export default function HomeClient() {
               style={{ height: "360px" }}
             >
               <Image
-                src="/images/vanessa/vanessa-cta.jpg"
+                src="/images/vanessa/vanessa-cta.webp"
                 quality={90}
                 alt="Vanessa Lejk"
                 fill
