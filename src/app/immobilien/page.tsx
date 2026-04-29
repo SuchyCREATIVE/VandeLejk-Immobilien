@@ -2,9 +2,9 @@ import type { Metadata } from "next";
 import ImmobilienClient from "./ImmobilienClient";
 
 export const metadata: Metadata = {
-  title: "Aktuelle Immobilienangebote in Hilden | VandeLejk",
+  title: "Erfolgsprojekte – Verkaufte Immobilien | VandeLejk",
   description:
-    "Ausgewählte Eigentumswohnungen und Häuser in Hilden und Umgebung. Persönlich geprüft und professionell präsentiert.",
+    "Ein Einblick in bereits erfolgreich verkaufte Objekte – mit Stimmen meiner Eigentümer. Persönlich begleitet, sorgfältig vermarktet.",
   alternates: {
     canonical: "https://vandelejk-immobilien.de/immobilien",
   },

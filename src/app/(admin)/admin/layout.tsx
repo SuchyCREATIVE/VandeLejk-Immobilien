@@ -9,7 +9,7 @@ import { LayoutDashboard, MessageSquareQuote, Building2, Settings, LogOut, Users
 const NAV = [
   { href: "/admin",               icon: LayoutDashboard,    label: "Übersicht",       adminOnly: false },
   { href: "/admin/kundenstimmen", icon: MessageSquareQuote, label: "Kundenstimmen",   adminOnly: false },
-  { href: "/admin/immobilien",    icon: Building2,           label: "Immobilien",      adminOnly: false },
+  { href: "/admin/immobilien",    icon: Building2,           label: "Erfolgsprojekte", adminOnly: false },
   { href: "/admin/einstellungen", icon: Settings,            label: "Einstellungen",   adminOnly: true  },
   { href: "/admin/benutzer",      icon: Users,               label: "Benutzer",        adminOnly: true  },
 ];

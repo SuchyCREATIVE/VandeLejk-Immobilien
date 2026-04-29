@@ -21,7 +21,7 @@ const SERVICES = [
       "Zugang zu exklusiven und marktfrischen Angeboten",
       "Begleitung bei Besichtigungen und Verhandlungen",
       "Unterstützung bei Finanzierungsplanung",
-      "Begleitung zum Notartermin",
+      "Erläuterung des notariellen Kaufvertrages",
     ],
   },
   {
@@ -31,11 +31,11 @@ const SERVICES = [
     description:
       "Sie möchten Ihre Immobilie erfolgreich verkaufen? Mit einer fundierten Marktanalyse, professioneller Vermarktung und persönlichem Einsatz erzielen wir gemeinsam den bestmöglichen Preis.",
     details: [
-      "Kostenlose Marktwertermittlung",
+      "Fundierte Marktwertermittlung",
       "Professionelle Exposé-Erstellung",
       "Gezielte Online- und Offline-Vermarktung",
       "Sorgfältige Käuferprüfung",
-      "Komplette Abwicklung bis zum Notartermin",
+      "Gesamte Abwicklung bis zur Schlüsselübergabe",
     ],
   },
   {
@@ -72,7 +72,7 @@ const SERVICES = [
     description:
       "Manchmal braucht man einfach einen kompetenten Ansprechpartner, der ehrlich antwortet. Ich berate Sie auch dann, wenn Sie (noch) keinen konkreten Auftrag haben.",
     details: [
-      "Erstgespräch kostenlos und unverbindlich",
+      "Persönliches Erstgespräch – unverbindlich",
       "Einschätzung zu Kauf- und Verkaufsmöglichkeiten",
       "Unterstützung bei Verhandlungen",
       "Vermittlung von Notaren, Gutachtern, Handwerkern",
@@ -123,7 +123,7 @@ export default function AngebotPage() {
             className="text-5xl md:text-6xl text-white mb-6 max-w-xl leading-[1.1]"
           >
             Mein Angebot<br />
-            <em className="italic text-white/80">für Sie</em>
+            <span className="text-white/80">für Sie</span>
           </motion.h1>
           <motion.div
             variants={{ hidden: { scaleX: 0 }, visible: { scaleX: 1, transition: { duration: 0.6, delay: 0.25 } } }}
@@ -217,7 +217,7 @@ export default function AngebotPage() {
               <blockquote className="text-2xl md:text-3xl text-white leading-[1.35] mb-8">
                 „Ich begleite Sie nicht<br />
                 nur als Maklerin –<br />
-                <em className="italic text-white/70">sondern als Vertraute."</em>
+                <span className="text-white/70">sondern als Vertraute."</span>
               </blockquote>
               <div className="w-10 h-px bg-white/20 mb-6" />
               <p className="text-sm text-white/60 leading-relaxed">
@@ -243,11 +243,11 @@ export default function AngebotPage() {
           >
             <FileText size={20} className="text-sand flex-shrink-0 mt-0.5" />
             <div>
-              <h3 className="text-lg text-anthrazit-dark mb-2">Ihr Erstgespräch ist kostenlos</h3>
+              <h3 className="text-lg text-anthrazit-dark mb-2">Ihr exklusives Erstgespräch</h3>
               <p className="text-sm leading-relaxed text-anthrazit-light">
                 Lernen Sie mich unverbindlich kennen. Im Erstgespräch besprechen wir Ihre
-                Situation, Ihre Wünsche und wie ich Ihnen am besten helfen kann – ohne
-                Kosten, ohne Verpflichtung.
+                Situation, Ihre Wünsche und wie ich Ihnen am besten helfen kann –
+                persönlich und ohne Verpflichtung.
               </p>
             </div>
           </motion.div>
@@ -263,7 +263,7 @@ export default function AngebotPage() {
             className="text-3xl md:text-4xl text-white mb-8"
           >
             Klingt das nach dem,<br />
-            <em>was Sie suchen?</em>
+            was Sie suchen?
           </motion.h2>
           <motion.div
             variants={fadeUp(0.1)} initial="hidden" whileInView="visible"

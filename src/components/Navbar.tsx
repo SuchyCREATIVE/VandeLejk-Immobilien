@@ -9,7 +9,7 @@ import { Menu, X, ArrowRight } from "lucide-react";
 const NAV_LINKS = [
   { href: "/",           label: "Home" },
   { href: "/angebot",    label: "Mein Angebot" },
-  { href: "/immobilien", label: "Angebote" },
+  { href: "/immobilien", label: "Erfolgsprojekte" },
 ];
 
 export default function Navbar() {

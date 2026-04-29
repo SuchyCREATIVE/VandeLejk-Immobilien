@@ -5,8 +5,8 @@ import { motion, AnimatePresence } from "framer-motion";
 import Image from "next/image";
 import Link from "next/link";
 import {
-  MapPin, Maximize2, BedDouble, Bath, Euro,
-  ArrowRight, ChevronLeft, ChevronRight, X
+  MapPin, Maximize2, BedDouble, Bath, CheckCircle2,
+  ArrowRight, ChevronLeft, ChevronRight, X, Quote
 } from "lucide-react";
 
 import { fadeUp } from "@/lib/animations";
@@ -26,9 +26,11 @@ type Property = {
   description: string;
   highlights: string[];
   photos: string[];
+  testimonialQuote: string;
+  testimonialAuthor: string;
 };
 
-function Gallery({ photos, address, city }: { photos: string[]; address: string; city: string }) {
+function Gallery({ photos, city, type }: { photos: string[]; city: string; type: string }) {
   const [active,   setActive]   = useState(0);
   const [lightbox, setLightbox] = useState<number | null>(null);
 
@@ -72,7 +74,7 @@ function Gallery({ photos, address, city }: { photos: string[]; address: string;
           >
             <Image
               src={photos[active]}
-              alt={`${address} in ${city} – Foto ${active + 1}`}
+              alt={`${type} in ${city} – Foto ${active + 1}`}
               fill
               className="object-cover"
               quality={90}
@@ -111,7 +113,7 @@ function Gallery({ photos, address, city }: { photos: string[]; address: string;
                 i === active ? "ring-2 ring-anthrazit" : "opacity-60 hover:opacity-100"
               } transition-opacity`}
             >
-              <Image src={src} alt={`${address} – Vorschaubild ${i + 1}`} fill className="object-cover" sizes="10vw" />
+              <Image src={src} alt={`${type} in ${city} – Vorschaubild ${i + 1}`} fill className="object-cover" sizes="10vw" />
             </button>
           ))}
         </div>
@@ -140,7 +142,7 @@ function Gallery({ photos, address, city }: { photos: string[]; address: string;
             >
               <Image
                 src={photos[lightbox]}
-                alt={`${address} in ${city} – Foto ${lightbox + 1}`}
+                alt={`${type} in ${city} – Foto ${lightbox + 1}`}
                 fill
                 className="object-contain"
                 quality={90}
@@ -182,18 +184,18 @@ export default function ImmobilienPage() {
   if (!active) {
     return (
       <section className="pt-40 pb-32 px-6 bg-cream text-center">
-        <p className="text-[10px] tracking-[0.35em] uppercase text-sand mb-5">Aktuelle Angebote</p>
-        <h1 className="text-4xl md:text-5xl text-anthrazit-dark mb-6">Immobilienangebote</h1>
+        <p className="text-[10px] tracking-[0.35em] uppercase text-sand mb-5">Verkaufte Objekte</p>
+        <h1 className="text-4xl md:text-5xl text-anthrazit-dark mb-6">Erfolgsprojekte</h1>
         <div className="w-12 h-px bg-sand mx-auto mb-10" />
         <p className="text-[15px] leading-relaxed text-anthrazit-light max-w-md mx-auto mb-10">
-          Derzeit sind keine Objekte verfügbar. Sprechen Sie mich gerne direkt an –
-          ich habe Zugang zu weiteren Angeboten.
+          Bald sehen Sie hier Einblicke in begleitete Verkäufe – mit Stimmen
+          meiner Eigentümer. Sprechen Sie mich gerne direkt an.
         </p>
         <Link
           href="/kontakt"
           className="inline-flex items-center gap-2 border border-sand text-anthrazit px-8 py-3.5 text-[11px] tracking-[0.2em] uppercase hover:border-anthrazit transition-colors duration-300"
         >
-          Jetzt anfragen <ArrowRight size={12} />
+          Kontakt aufnehmen <ArrowRight size={12} />
         </Link>
       </section>
     );
@@ -202,18 +204,19 @@ export default function ImmobilienPage() {
   if (!loading && properties.length === 0) {
     return (
       <section className="pt-40 pb-32 px-6 bg-cream text-center">
-        <p className="text-[10px] tracking-[0.35em] uppercase text-sand mb-5">Aktuelle Angebote</p>
-        <h1 className="text-4xl md:text-5xl text-anthrazit-dark mb-6">Immobilienangebote</h1>
+        <p className="text-[10px] tracking-[0.35em] uppercase text-sand mb-5">Verkaufte Objekte</p>
+        <h1 className="text-4xl md:text-5xl text-anthrazit-dark mb-6">Erfolgsprojekte</h1>
         <div className="w-12 h-px bg-sand mx-auto mb-10" />
         <p className="text-[15px] leading-relaxed text-anthrazit-light max-w-md mx-auto mb-10">
-          Derzeit sind keine Objekte verfügbar. Sprechen Sie mich gerne direkt an –
-          ich habe Zugang zu weiteren Angeboten.
+          In Kürze finden Sie hier Einblicke in bereits verkaufte Objekte –
+          mit Stimmen meiner Eigentümer. Sie planen einen Verkauf?
+          Sprechen Sie mich gerne direkt an.
         </p>
         <Link
-          href="/kontakt"
+          href="/angebot"
           className="inline-flex items-center gap-2 border border-sand text-anthrazit px-8 py-3.5 text-[11px] tracking-[0.2em] uppercase hover:border-anthrazit transition-colors duration-300"
         >
-          Jetzt anfragen <ArrowRight size={12} />
+          Mein Angebot <ArrowRight size={12} />
         </Link>
       </section>
     );
@@ -228,19 +231,20 @@ export default function ImmobilienPage() {
             variants={fadeUp()} initial="hidden" animate="visible"
             className="text-[10px] tracking-[0.35em] uppercase text-sand mb-4"
           >
-            Aktuelle Angebote
+            Verkaufte Objekte
           </motion.p>
           <motion.h1
             variants={fadeUp(0.1)} initial="hidden" animate="visible"
             className="text-4xl md:text-5xl text-anthrazit-dark mb-5 max-w-lg"
           >
-            Immobilienangebote
+            Erfolgsprojekte
           </motion.h1>
           <motion.p
             variants={fadeUp(0.2)} initial="hidden" animate="visible"
             className="text-[15px] leading-relaxed text-anthrazit-light max-w-xl"
           >
-            Ausgewählte Objekte – persönlich von mir geprüft und mit größter Sorgfalt präsentiert.
+            Ein Einblick in Objekte, die ich erfolgreich begleitet habe –
+            mit Stimmen meiner Eigentümer.
           </motion.p>
         </div>
       </section>
@@ -252,10 +256,13 @@ export default function ImmobilienPage() {
             <motion.div
               variants={fadeUp()} initial="hidden" whileInView="visible"
               viewport={{ once: true }}
-              className="mb-6"
+              className="mb-6 flex flex-wrap items-center gap-2"
             >
               <span className="inline-block border border-sand text-[10px] tracking-[0.2em] uppercase text-anthrazit-light px-3 py-1">
-                {p.type} · {p.status}
+                {p.type}
+              </span>
+              <span className="inline-flex items-center gap-1.5 bg-anthrazit-dark text-white text-[10px] tracking-[0.2em] uppercase px-3 py-1">
+                <CheckCircle2 size={11} /> {p.status}
               </span>
             </motion.div>
 
@@ -265,10 +272,10 @@ export default function ImmobilienPage() {
                 variants={fadeUp(0.05)} initial="hidden" whileInView="visible"
                 viewport={{ once: true }}
               >
-                {p.photos.length > 0 && <Gallery photos={p.photos} address={p.address} city={p.city} />}
+                {p.photos.length > 0 && <Gallery photos={p.photos} city={p.city} type={p.type} />}
 
                 <div className="mt-10">
-                  <h2 className="text-2xl text-anthrazit-dark mb-2">{p.address}</h2>
+                  <h2 className="text-2xl text-anthrazit-dark mb-2">{p.type} in {p.city}</h2>
                   <p className="flex items-center gap-1.5 text-sm text-anthrazit-light mb-8">
                     <MapPin size={14} /> {p.city}
                   </p>
@@ -280,6 +287,20 @@ export default function ImmobilienPage() {
                         <p key={i} className="text-sm leading-relaxed text-anthrazit-light mb-4">{para}</p>
                       ))}
                     </>
+                  )}
+
+                  {p.testimonialQuote && (
+                    <div className="mt-10 bg-cream px-7 py-8 border-l-2 border-sand">
+                      <Quote size={20} className="text-sand mb-3" aria-hidden />
+                      <blockquote className="text-[15px] leading-relaxed text-anthrazit-dark mb-4">
+                        „{p.testimonialQuote}"
+                      </blockquote>
+                      {p.testimonialAuthor && (
+                        <p className="text-[10px] tracking-[0.25em] uppercase text-anthrazit-light">
+                          — {p.testimonialAuthor}
+                        </p>
+                      )}
+                    </div>
                   )}
                 </div>
               </motion.div>
@@ -297,7 +318,6 @@ export default function ImmobilienPage() {
                       { icon: Maximize2, label: "Wohnfläche",  val: p.area },
                       { icon: BedDouble, label: "Zimmer",       val: p.rooms },
                       { icon: Bath,      label: "Badezimmer",   val: p.bathrooms },
-                      { icon: Euro,      label: "Kaufpreis",    val: p.price },
                     ].map((f) => f.val ? (
                       <li key={f.label} className="flex items-center justify-between text-sm">
                         <span className="flex items-center gap-2 text-anthrazit-light">
@@ -324,15 +344,16 @@ export default function ImmobilienPage() {
                 )}
 
                 <div className="bg-anthrazit-dark text-white p-6">
-                  <p className="text-[10px] tracking-[0.25em] uppercase text-white/40 mb-4">Interesse geweckt?</p>
+                  <p className="text-[10px] tracking-[0.25em] uppercase text-white/40 mb-4">Auch verkaufen?</p>
                   <p className="text-sm text-white/70 leading-relaxed mb-5">
-                    Ich freue mich über Ihre Anfrage und melde mich schnellstmöglich bei Ihnen.
+                    Sie planen den Verkauf Ihrer Immobilie? Lassen Sie uns
+                    unverbindlich ins Gespräch kommen.
                   </p>
                   <Link
-                    href="/kontakt"
+                    href="/angebot"
                     className="flex items-center justify-center gap-2 border border-white/20 text-white py-3 text-[11px] tracking-[0.2em] uppercase hover:border-white/50 transition-colors duration-300"
                   >
-                    Anfrage senden <ArrowRight size={13} />
+                    Mein Angebot <ArrowRight size={13} />
                   </Link>
                 </div>
               </motion.div>
@@ -349,9 +370,8 @@ export default function ImmobilienPage() {
             viewport={{ once: true }}
             className="text-sm leading-relaxed text-anthrazit-light"
           >
-            Suchen Sie ein bestimmtes Objekt, das hier noch nicht aufgeführt ist?
-            Sprechen Sie mich an – ich habe Zugang zu weiteren Angeboten und helfe
-            Ihnen, die passende Immobilie zu finden.
+            Sie möchten Ihre Immobilie ebenfalls in vertrauensvolle Hände
+            geben? Lassen Sie uns ein persönliches Erstgespräch vereinbaren.
           </motion.p>
           <motion.div
             variants={fadeUp(0.1)} initial="hidden" whileInView="visible"
@@ -362,7 +382,7 @@ export default function ImmobilienPage() {
               href="/kontakt"
               className="inline-flex items-center gap-2 text-[11px] tracking-[0.2em] uppercase text-anthrazit border-b border-sand pb-0.5 hover:border-anthrazit transition-colors duration-200"
             >
-              Jetzt anfragen <ArrowRight size={12} />
+              Kontakt aufnehmen <ArrowRight size={12} />
             </Link>
           </motion.div>
         </div>

@@ -27,6 +27,11 @@
 - Kein lokales Testing – direkt auf scpreview deployen
 - Foto-Uploads landen in `public/uploads/properties/` und werden über `/api/uploads/[...path]` ausgeliefert (Next.js Production serviert keine dynamisch hinzugefügten Dateien aus public/)
 
+## Crawling
+- ✅ Produktion (vandelejk-immobilien.de): wird gecrawlt – `NEXT_PUBLIC_SITE_URL` enthält keine 'scpreview'
+- ❌ Preview/Lokal: blockiert – URL enthält 'scpreview' oder 'localhost'
+- Quelle: `src/app/robots.ts` (dynamisch). Keine statische `public/robots.txt` anlegen – die würde robots.ts überschreiben.
+
 ## Deploy
 - Preview: `./deploy.sh preview`
 - Live: `./deploy.sh live` (erst nach Freigabe durch Dennis!)

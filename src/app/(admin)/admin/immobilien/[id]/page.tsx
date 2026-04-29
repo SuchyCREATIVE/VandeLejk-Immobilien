@@ -10,14 +10,18 @@ type FormData = {
   address: string; city: string; type: string; status: string;
   price: string; area: string; rooms: number; bathrooms: number;
   floor: string; yearBuilt: string; description: string;
-  highlights: string[]; photos: string[]; active: boolean;
+  highlights: string[]; photos: string[];
+  testimonialQuote: string; testimonialAuthor: string;
+  active: boolean;
 };
 
 const EMPTY: FormData = {
-  address: "", city: "", type: "Eigentumswohnung", status: "Verfügbar",
+  address: "", city: "", type: "Eigentumswohnung", status: "Verkauft",
   price: "auf Anfrage", area: "", rooms: 3, bathrooms: 1,
   floor: "", yearBuilt: "", description: "",
-  highlights: [], photos: [], active: true,
+  highlights: [], photos: [],
+  testimonialQuote: "", testimonialAuthor: "",
+  active: true,
 };
 
 export default function ImmobilieEditPage() {
@@ -64,7 +68,10 @@ export default function ImmobilieEditPage() {
           address: p.address, city: p.city, type: p.type, status: p.status,
           price: p.price, area: p.area, rooms: p.rooms, bathrooms: p.bathrooms,
           floor: p.floor, yearBuilt: p.yearBuilt, description: p.description,
-          highlights: p.highlights ?? [], photos: p.photos ?? [], active: p.active,
+          highlights: p.highlights ?? [], photos: p.photos ?? [],
+          testimonialQuote: p.testimonialQuote ?? "",
+          testimonialAuthor: p.testimonialAuthor ?? "",
+          active: p.active,
         });
         setLoading(false);
       })
@@ -206,7 +213,7 @@ export default function ImmobilieEditPage() {
           <ArrowLeft size={18} />
         </button>
         <div>
-          <p className="text-[10px] tracking-[0.35em] uppercase text-sand mb-1">Administration · Immobilien</p>
+          <p className="text-[10px] tracking-[0.35em] uppercase text-sand mb-1">Administration · Erfolgsprojekte</p>
           <h1 className="text-2xl text-anthrazit-dark">
             {isNew ? "Neues Objekt" : form.address || "Objekt bearbeiten"}
           </h1>
@@ -218,14 +225,15 @@ export default function ImmobilieEditPage() {
       <div className="space-y-6">
         {/* Basisdaten */}
         <div className="bg-white border border-beige p-6">
-          <h2 className="text-[10px] tracking-[0.35em] uppercase text-sand mb-4">Basisdaten</h2>
+          <h2 className="text-[10px] tracking-[0.35em] uppercase text-sand mb-1">Basisdaten</h2>
+          <p className="text-xs text-anthrazit-light mb-4">Adresse wird intern gepflegt, aber nicht öffentlich angezeigt – nur Stadt &amp; Typ erscheinen auf der Erfolgsprojekte-Seite.</p>
           <div className="grid grid-cols-2 gap-4">
             {([
-              { key: "address",  label: "Adresse *",  placeholder: "Röpkestraße 51" },
-              { key: "city",     label: "Stadt *",     placeholder: "40215 Düsseldorf" },
+              { key: "address",  label: "Adresse * (intern)",  placeholder: "Röpkestraße 51" },
+              { key: "city",     label: "Stadt *",     placeholder: "Hilden" },
               { key: "type",     label: "Typ",         placeholder: "Eigentumswohnung" },
-              { key: "status",   label: "Status",      placeholder: "Verfügbar" },
-              { key: "price",    label: "Preis",       placeholder: "auf Anfrage" },
+              { key: "status",   label: "Status",      placeholder: "Verkauft" },
+              { key: "price",    label: "Preis (optional)", placeholder: "auf Anfrage" },
               { key: "area",     label: "Wohnfläche",  placeholder: "82 m²" },
               { key: "floor",    label: "Etage / Art", placeholder: "2. Obergeschoss" },
               { key: "yearBuilt",label: "Baujahr",     placeholder: "1975 (Kernsaniert 2019)" },
@@ -262,6 +270,22 @@ export default function ImmobilieEditPage() {
             onChange={(e) => setForm({ ...form, description: e.target.value })}
             className="w-full border border-beige px-3 py-2 text-sm text-anthrazit focus:border-anthrazit-light focus:outline-none resize-none"
             placeholder="Beschreiben Sie das Objekt…" />
+        </div>
+
+        {/* Eigentümer-Stimme */}
+        <div className="bg-white border border-beige p-6">
+          <h2 className="text-[10px] tracking-[0.35em] uppercase text-sand mb-1">Eigentümer-Stimme</h2>
+          <p className="text-xs text-anthrazit-light mb-4">Optional. Wird unter dem Objekt als Zitat angezeigt.</p>
+          <label className="block text-[10px] tracking-widest uppercase text-anthrazit-light mb-1.5">Zitat</label>
+          <textarea rows={4} value={form.testimonialQuote}
+            onChange={(e) => setForm({ ...form, testimonialQuote: e.target.value })}
+            className="w-full border border-beige px-3 py-2 text-sm text-anthrazit focus:border-anthrazit-light focus:outline-none resize-none mb-4"
+            placeholder="z.B. Ein toller Verkaufsprozess – Vanessa hat alles im Griff gehabt." />
+          <label className="block text-[10px] tracking-widest uppercase text-anthrazit-light mb-1.5">Bezeichnung Eigentümer</label>
+          <input type="text" value={form.testimonialAuthor}
+            onChange={(e) => setForm({ ...form, testimonialAuthor: e.target.value })}
+            className="w-full border border-beige px-3 py-2 text-sm text-anthrazit focus:border-anthrazit-light focus:outline-none"
+            placeholder="z.B. Familie M., Hilden" />
         </div>
 
         {/* Highlights */}

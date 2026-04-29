@@ -192,7 +192,7 @@ export default function HomeClient() {
           {[
             { value: `${totalRatings}`,           label: "Google-Bewertungen" },
             { value: `${rating.toFixed(1)}\u00a0★`, label: "Ø Bewertung" },
-            { value: "Kostenlos",                  label: "Erstgespräch" },
+            { value: "Persönlich",                 label: "Erstgespräch" },
           ].map((stat, i) => (
             <motion.div
               key={stat.label}
@@ -221,7 +221,7 @@ export default function HomeClient() {
           </p>
           <h2 className="text-2xl md:text-4xl text-anthrazit-dark leading-snug">
             Mit Herz und Verstand<br />
-            <em>auf dem Immobilienpfad.</em>
+            auf dem Immobilienpfad.
           </h2>
         </motion.div>
       </section>
@@ -283,11 +283,11 @@ export default function HomeClient() {
             className="relative min-h-[560px] lg:min-h-[700px]"
           >
             <Image
-              src="/images/vanessa/vanessa-door.jpg"
-                quality={90}
+              src="/images/vanessa/vanessa-front.jpg"
+              quality={90}
               alt="Vanessa Lejk – VandeLejk Immobilien"
               fill
-              className="object-cover object-center"
+              className="object-cover object-top"
               sizes="(max-width: 1024px) 100vw, 55vw"
             />
             {/* Floating Label */}
@@ -308,7 +308,7 @@ export default function HomeClient() {
             </p>
 
             {/* Dekoratives Zitat */}
-            <blockquote className="text-2xl md:text-3xl text-anthrazit-dark leading-snug mb-8 italic">
+            <blockquote className="text-2xl md:text-3xl text-anthrazit-dark leading-snug mb-8">
               „Persönlich.<br />Verlässlich.<br />Mit Herzblut."
             </blockquote>
 
@@ -375,22 +375,21 @@ export default function HomeClient() {
               viewport={{ once: true }}
             >
               <p className="text-[10px] tracking-[0.35em] uppercase text-sand mb-5">
-                Aktuelle Angebote
+                Verkaufte Objekte
               </p>
               <h2 className="text-3xl md:text-4xl text-anthrazit-dark mb-6">
-                Ausgewählte<br /><em>Immobilien</em>
+                Meine<br />Erfolgsprojekte
               </h2>
               <div className="w-10 h-px bg-sand mb-8" />
               <p className="text-[15px] leading-relaxed text-anthrazit-light mb-10">
-                Jedes Objekt wird von mir persönlich geprüft und mit größter
-                Sorgfalt präsentiert. Von der Eigentumswohnung bis zum
-                Einfamilienhaus.
+                Ein Einblick in Objekte, die ich erfolgreich begleitet habe –
+                mit Stimmen meiner Eigentümer.
               </p>
               <Link
                 href="/immobilien"
                 className="inline-flex items-center gap-2 border border-sand text-anthrazit px-8 py-3.5 text-[11px] tracking-[0.2em] uppercase hover:border-anthrazit transition-all duration-300"
               >
-                Alle Angebote <ArrowRight size={13} />
+                Alle Erfolgsprojekte <ArrowRight size={13} />
               </Link>
             </motion.div>
 
@@ -559,7 +558,7 @@ export default function HomeClient() {
               </p>
               <h2 className="text-3xl text-anthrazit-dark mb-6">
                 Bereit für Ihren<br />
-                <em>nächsten Schritt?</em>
+                nächsten Schritt?
               </h2>
               <div className="w-8 h-px bg-sand mb-7" />
               <p className="text-sm leading-relaxed text-anthrazit-light mb-8">

@@ -50,7 +50,7 @@ export default function ImmobilienAdmin() {
       <div className="flex items-center justify-between mb-8">
         <div>
           <p className="text-[10px] tracking-[0.35em] uppercase text-sand mb-1">Administration</p>
-          <h1 className="text-2xl text-anthrazit-dark">Immobilien</h1>
+          <h1 className="text-2xl text-anthrazit-dark">Erfolgsprojekte</h1>
         </div>
         <button
           onClick={() => router.push("/admin/immobilien/neu")}

@@ -58,21 +58,23 @@ model Testimonial {
 }
 
 model Property {
-  id          String   @id @default(cuid())
-  address     String
-  city        String
-  type        String   @default("Eigentumswohnung")
-  status      String   @default("Verfügbar")
-  price       String   @default("auf Anfrage")
-  area        String   @default("")
-  rooms       Int      @default(3)
-  bathrooms   Int      @default(1)
-  floor       String   @default("")
-  yearBuilt   String   @default("")
-  description String   @default("")
-  highlights  String   @default("[]")
-  photos      String   @default("[]")
-  active      Boolean  @default(true)
-  sortOrder   Int      @default(0)
-  createdAt   DateTime @default(now())
+  id                String   @id @default(cuid())
+  address           String
+  city              String
+  type              String   @default("Eigentumswohnung")
+  status            String   @default("Verkauft")
+  price             String   @default("auf Anfrage")
+  area              String   @default("")
+  rooms             Int      @default(3)
+  bathrooms         Int      @default(1)
+  floor             String   @default("")
+  yearBuilt         String   @default("")
+  description       String   @default("")
+  highlights        String   @default("[]")
+  photos            String   @default("[]")
+  testimonialQuote  String   @default("")
+  testimonialAuthor String   @default("")
+  active            Boolean  @default(true)
+  sortOrder         Int      @default(0)
+  createdAt         DateTime @default(now())
 }

@@ -122,7 +122,7 @@ export default function KontaktPage() {
               </div>
 
               <div className="bg-cream px-6 py-5">
-                <p className="text-sm leading-relaxed text-anthrazit-light italic">
+                <p className="text-sm leading-relaxed text-anthrazit-light">
                   „Ich nehme mir die Zeit, die Ihr Anliegen verdient.
                   Bei mir sind Sie in guten Händen."
                 </p>
