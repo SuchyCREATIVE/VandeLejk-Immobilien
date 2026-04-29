@@ -2,6 +2,10 @@ import { NextRequest, NextResponse } from "next/server";
 import { requireAuth } from "@/lib/api-auth";
 import { writeFile, mkdir } from "fs/promises";
 import path from "path";
+import sharp from "sharp";
+
+const MAX_WIDTH = 1920;
+const WEBP_QUALITY = 82;
 
 export async function POST(req: NextRequest) {
   const { error } = await requireAuth();
@@ -20,11 +24,17 @@ export async function POST(req: NextRequest) {
   const paths: string[] = [];
 
   for (const file of files) {
-    const ext = file.name.split(".").pop()?.toLowerCase() ?? "jpg";
-    const name = `${Date.now()}-${Math.random().toString(36).slice(2)}.${ext}`;
     const bytes = await file.arrayBuffer();
+
+    const optimized = await sharp(Buffer.from(bytes))
+      .rotate()
+      .resize({ width: MAX_WIDTH, withoutEnlargement: true })
+      .webp({ quality: WEBP_QUALITY })
+      .toBuffer();
+
+    const name = `${Date.now()}-${Math.random().toString(36).slice(2)}.webp`;
     const dest = path.join(uploadDir, name);
-    await writeFile(dest, Buffer.from(bytes));
+    await writeFile(dest, optimized);
     paths.push(`/api/uploads/properties/${name}`);
   }
 

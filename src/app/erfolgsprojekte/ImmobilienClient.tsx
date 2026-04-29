@@ -114,20 +114,16 @@ function Gallery({ photos, city, type }: { photos: string[]; city: string; type:
               key={i}
               type="button"
               onClick={() => setActive(i)}
-              className={`block relative aspect-square overflow-hidden bg-beige p-0 ${
+              style={{
+                backgroundImage: `url("${src}")`,
+                backgroundSize: "cover",
+                backgroundPosition: "center",
+              }}
+              className={`block aspect-square bg-beige p-0 border-0 ${
                 i === active ? "ring-2 ring-anthrazit" : "opacity-60 hover:opacity-100"
               } transition-opacity`}
               aria-label={`Vorschaubild ${i + 1}`}
-            >
-              <Image
-                src={src}
-                alt=""
-                width={200}
-                height={200}
-                unoptimized
-                className="w-full h-full object-cover"
-              />
-            </button>
+            />
           ))}
         </div>
       )}
