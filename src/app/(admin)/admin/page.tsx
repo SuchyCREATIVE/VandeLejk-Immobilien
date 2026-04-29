@@ -18,9 +18,9 @@ const CARDS = [
     desc: "Bewertungen und Referenzen verwalten",
   },
   {
-    href: "/admin/immobilien",
+    href: "/admin/erfolgsprojekte",
     icon: Building2,
-    title: "Immobilien",
+    title: "Erfolgsprojekte",
     desc: "Objekte anlegen, bearbeiten, deaktivieren",
   },
   {

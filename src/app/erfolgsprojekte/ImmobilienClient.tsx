@@ -11,6 +11,10 @@ import {
 
 import { fadeUp } from "@/lib/animations";
 
+function displayCity(city: string): string {
+  return city.replace(/^\d{5}\s*/, "").trim();
+}
+
 type Property = {
   id: string;
   address: string;
@@ -109,11 +113,18 @@ function Gallery({ photos, city, type }: { photos: string[]; city: string; type:
             <button
               key={i}
               onClick={() => setActive(i)}
-              className={`relative aspect-square overflow-hidden ${
+              className={`relative aspect-square overflow-hidden bg-beige ${
                 i === active ? "ring-2 ring-anthrazit" : "opacity-60 hover:opacity-100"
               } transition-opacity`}
+              aria-label={`Vorschaubild ${i + 1}`}
             >
-              <Image src={src} alt={`${type} in ${city} – Vorschaubild ${i + 1}`} fill className="object-cover" sizes="10vw" />
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img
+                src={src}
+                alt=""
+                loading="lazy"
+                className="absolute inset-0 w-full h-full object-cover"
+              />
             </button>
           ))}
         </div>
@@ -272,12 +283,12 @@ export default function ImmobilienPage() {
                 variants={fadeUp(0.05)} initial="hidden" whileInView="visible"
                 viewport={{ once: true }}
               >
-                {p.photos.length > 0 && <Gallery photos={p.photos} city={p.city} type={p.type} />}
+                {p.photos.length > 0 && <Gallery photos={p.photos} city={displayCity(p.city)} type={p.type} />}
 
                 <div className="mt-10">
-                  <h2 className="text-2xl text-anthrazit-dark mb-2">{p.type} in {p.city}</h2>
+                  <h2 className="text-2xl text-anthrazit-dark mb-2">{p.type} in {displayCity(p.city)}</h2>
                   <p className="flex items-center gap-1.5 text-sm text-anthrazit-light mb-8">
-                    <MapPin size={14} /> {p.city}
+                    <MapPin size={14} /> {displayCity(p.city)}
                   </p>
 
                   {p.description && (

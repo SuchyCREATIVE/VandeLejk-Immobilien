@@ -6,7 +6,7 @@ export const metadata: Metadata = {
   description:
     "Ein Einblick in bereits erfolgreich verkaufte Objekte – mit Stimmen meiner Eigentümer. Persönlich begleitet, sorgfältig vermarktet.",
   alternates: {
-    canonical: "https://vandelejk-immobilien.de/immobilien",
+    canonical: "https://vandelejk-immobilien.de/erfolgsprojekte",
   },
 };
 

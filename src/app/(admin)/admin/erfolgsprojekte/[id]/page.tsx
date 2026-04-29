@@ -88,7 +88,7 @@ export default function ImmobilieEditPage() {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(form),
       });
-      if (r.ok) { router.push("/admin/immobilien"); }
+      if (r.ok) { router.push("/admin/erfolgsprojekte"); }
       else { setMsg("Fehler beim Speichern."); }
     } finally { setSaving(false); }
   }
@@ -208,7 +208,7 @@ export default function ImmobilieEditPage() {
 
       {/* Header */}
       <div className="flex items-center gap-4 mb-8">
-        <button onClick={() => router.push("/admin/immobilien")}
+        <button onClick={() => router.push("/admin/erfolgsprojekte")}
           className="p-1.5 text-anthrazit-light hover:text-anthrazit transition-colors">
           <ArrowLeft size={18} />
         </button>
@@ -419,7 +419,7 @@ export default function ImmobilieEditPage() {
             className="flex items-center gap-2 bg-anthrazit-dark text-white px-6 py-2.5 text-[11px] tracking-[0.15em] uppercase hover:bg-anthrazit transition-colors disabled:opacity-50">
             <Check size={13} /> {saving ? "Speichert…" : "Speichern"}
           </button>
-          <button onClick={() => router.push("/admin/immobilien")}
+          <button onClick={() => router.push("/admin/erfolgsprojekte")}
             className="flex items-center gap-2 border border-beige px-6 py-2.5 text-[11px] tracking-[0.15em] uppercase text-anthrazit-light hover:border-anthrazit-light transition-colors">
             <X size={13} /> Abbrechen
           </button>

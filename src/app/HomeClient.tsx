@@ -386,7 +386,7 @@ export default function HomeClient() {
                 mit Stimmen meiner Eigentümer.
               </p>
               <Link
-                href="/immobilien"
+                href="/erfolgsprojekte"
                 className="inline-flex items-center gap-2 border border-sand text-anthrazit px-8 py-3.5 text-[11px] tracking-[0.2em] uppercase hover:border-anthrazit transition-all duration-300"
               >
                 Alle Erfolgsprojekte <ArrowRight size={13} />

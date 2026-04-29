@@ -53,7 +53,7 @@ export default function ImmobilienAdmin() {
           <h1 className="text-2xl text-anthrazit-dark">Erfolgsprojekte</h1>
         </div>
         <button
-          onClick={() => router.push("/admin/immobilien/neu")}
+          onClick={() => router.push("/admin/erfolgsprojekte/neu")}
           className="flex items-center gap-2 bg-anthrazit-dark text-white px-5 py-2.5 text-[11px] tracking-[0.15em] uppercase hover:bg-anthrazit transition-colors"
         >
           <Plus size={13} /> Neues Objekt

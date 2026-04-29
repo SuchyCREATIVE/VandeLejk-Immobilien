@@ -17,7 +17,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
       priority: 0.8,
     },
     {
-      url: `${BASE_URL}/immobilien`,
+      url: `${BASE_URL}/erfolgsprojekte`,
       lastModified: new Date(),
       changeFrequency: "weekly",
       priority: 0.8,
