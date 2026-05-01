@@ -301,7 +301,7 @@ export default function HomeClient() {
           <motion.div
             variants={fadeUp(0.12)} initial="hidden" whileInView="visible"
             viewport={{ once: true }}
-            className="flex flex-col justify-center px-6 md:px-14 xl:px-20 py-16 lg:py-40 bg-white"
+            className="flex flex-col justify-center px-6 md:px-14 xl:px-20 py-16 lg:py-40 bg-white max-w-xl"
           >
             <p className="text-[10px] tracking-[0.35em] uppercase text-sand mb-6">
               Über mich
