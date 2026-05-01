@@ -275,20 +275,20 @@ export default function HomeClient() {
           ÜBER MICH – Großzügiges Editorial-Layout
       ══════════════════════════════════════════════════════════ */}
       <section className="overflow-hidden bg-white">
-        <div className="grid lg:grid-cols-[55%_45%]">
+        <div className="grid lg:grid-cols-[40%_60%]">
           {/* Foto */}
           <motion.div
             variants={fadeIn(0)} initial="hidden" whileInView="visible"
             viewport={{ once: true }}
-            className="relative min-h-[560px] lg:min-h-[700px]"
+            className="relative min-h-[560px] lg:min-h-[760px]"
           >
             <Image
               src="/images/vanessa/vanessa-front.webp"
               quality={90}
               alt="Vanessa Lejk – VandeLejk Immobilien"
               fill
-              className="object-cover object-top"
-              sizes="(max-width: 1024px) 100vw, 55vw"
+              className="object-cover object-center"
+              sizes="(max-width: 1024px) 100vw, 40vw"
             />
             {/* Floating Label */}
             <div className="absolute bottom-8 left-8 bg-white/90 backdrop-blur-sm px-5 py-3">
