@@ -27,10 +27,10 @@ export default function Navbar() {
 
   return (
     <header
-      className={`fixed top-0 left-0 right-0 z-50 transition-all duration-500 ${
+      className={`fixed top-0 left-0 right-0 z-50 bg-white transition-shadow duration-500 ${
         scrolled
-          ? "bg-white/97 backdrop-blur-md shadow-[0_1px_0_0_rgba(201,192,179,0.4)]"
-          : "bg-white shadow-[0_1px_0_0_rgba(201,192,179,0.25)]"
+          ? "shadow-[0_1px_0_0_rgba(201,192,179,0.45)]"
+          : "shadow-[0_1px_0_0_rgba(201,192,179,0.25)]"
       }`}
     >
       <nav className="max-w-6xl mx-auto px-6 flex items-center justify-between h-[72px]">
