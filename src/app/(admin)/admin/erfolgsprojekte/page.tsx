@@ -88,7 +88,7 @@ export default function ImmobilienAdmin() {
                 <button onClick={() => toggleActive(p)} className="p-1.5 text-anthrazit-light hover:text-anthrazit transition-colors" title={p.active ? "Deaktivieren" : "Aktivieren"}>
                   {p.active ? <EyeOff size={14} /> : <Eye size={14} />}
                 </button>
-                <button onClick={() => router.push(`/admin/immobilien/${p.id}`)} className="p-1.5 text-anthrazit-light hover:text-anthrazit transition-colors" title="Bearbeiten">
+                <button onClick={() => router.push(`/admin/erfolgsprojekte/${p.id}`)} className="p-1.5 text-anthrazit-light hover:text-anthrazit transition-colors" title="Bearbeiten">
                   <Pencil size={14} />
                 </button>
                 <button onClick={() => remove(p.id)} className="p-1.5 text-anthrazit-light hover:text-red-500 transition-colors" title="Löschen">

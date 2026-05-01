@@ -31,6 +31,16 @@ async function main() {
         newPhotos.push(url);
         continue;
       }
+
+      // Statische /images/...jpg|png – nur DB-Pfad updaten
+      if (url.startsWith("/images/") && /\.(jpg|jpeg|png)$/i.test(url)) {
+        const newUrl = url.replace(/\.(jpg|jpeg|png)$/i, ".webp");
+        newPhotos.push(newUrl);
+        rowChanged = true;
+        console.log(`  DB-Pfad: ${url} → ${newUrl}`);
+        continue;
+      }
+
       if (!url.startsWith("/api/uploads/properties/")) {
         console.warn(`  Unbekanntes Pfadformat, übersprungen: ${url}`);
         newPhotos.push(url);
@@ -68,8 +78,14 @@ async function main() {
         console.log(`  ${oldName} → ${newName} (${(before / 1024).toFixed(0)} kB → ${(after / 1024).toFixed(0)} kB)`);
       } catch (e: unknown) {
         const msg = e instanceof Error ? e.message : String(e);
-        console.error(`  Fehler bei ${oldName}: ${msg}`);
-        newPhotos.push(url);
+        if (msg.includes("ENOENT")) {
+          console.warn(`  Datei fehlt, aus DB entfernt: ${oldName}`);
+          rowChanged = true;
+          // url NICHT zu newPhotos hinzufügen → wird aus DB entfernt
+        } else {
+          console.error(`  Fehler bei ${oldName}: ${msg}`);
+          newPhotos.push(url);
+        }
       }
     }
 
