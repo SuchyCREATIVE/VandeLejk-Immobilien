@@ -287,7 +287,7 @@ export default function HomeClient() {
               quality={90}
               alt="Vanessa Lejk – VandeLejk Immobilien"
               fill
-              className="object-cover object-center"
+              className="object-cover object-top"
               sizes="(max-width: 1024px) 100vw, 40vw"
             />
             {/* Floating Label */}
