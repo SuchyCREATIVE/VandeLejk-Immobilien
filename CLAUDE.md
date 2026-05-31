@@ -83,7 +83,21 @@ Quelle: E-Mail „Der Countdown läuft :-)" vom 20.05. (`Screenshots/Der Countdo
 - **Hero-Upload-Route** ([api/admin/hero-image/route.ts](src/app/api/admin/hero-image/route.ts)) speicherte Originale unoptimiert unter `/uploads/` (404-Gefahr in Prod). Jetzt `sharp().rotate().resize(2400).webp(80)` wie die Property-Fotos + Auslieferung über `/api/uploads/...`. → Auto-WebP bei jedem Upload, in ALLEN Upload-Routen.
 - **Ergebnis gemessen:** Hero 336 KB → **195 KB AVIF** (~42 % leichter), WebP-Fallback 304 KB.
 
-**PDF-Broschüren (BOTTIMMO, von Vanessa beigelegt):** Einsteiger-Marketing-Material. Wir sind technisch bereits darüber (JSON-LD, WebP/AVIF, UX, Person-forward, lokal). Echte Rest-Wins laut Heften = On-Page-SEO-Feintuning: keyword-stärkere Title/Meta („Immobilienmaklerin Hilden") + beschreibende Alt-Texte. Optional als eigener Schritt (Dennis entscheidet), deckt sich mit `feedback_seo_baseline`.
+**PDF-Broschüren (BOTTIMMO, von Vanessa beigelegt):** Einsteiger-Marketing-Material. Wir sind technisch bereits darüber (JSON-LD, WebP/AVIF, UX, Person-forward, lokal). Echte Rest-Wins laut Heften = On-Page-SEO-Feintuning: keyword-stärkere Title/Meta + beschreibende Alt-Texte → daraus wurde der SEO-Sprint (unten).
+
+## Zuletzt gemacht (2026-06-01) – Bild-Ladezeit-Fix + SEO-Sprint (audit-website)
+
+**Bild-Ladezeit (Dennis: „dauert 2-3 s"):** Ursache war AVIF-Encoding auf dem schwachen Shared-Host – **erster** Aufruf eines Bildes ~3,2 s (gemessen), warm 0,12 s. Der next/image-Cache wird bei jedem Deploy neu aufgebaut → erster Besucher zahlt. Fix:
+- `deploy.sh`: **Bild-Cache-Vorwärmung** nach Deploy – holt alle `/_next/image`-URLs der Hauptseiten (`/`, `/kontakt`, `/angebot`, `/erfolgsprojekte`) und encodiert sie mit AVIF+WebP vorab. Kein Besucher wartet mehr. Gemessen danach: Hero 0,16 s.
+- `next.config.ts`: `deviceSizes`/`imageSizes` verschlankt (weniger CPU-Encodes), `minimumCacheTTL: 31536000`, `qualities: [65,75,80,85]`. Bildqualitäten im Code von q90/q95 auf q80 gesenkt (hero q65) → kleinere Bytes.
+- **AVIF ist Google-konform** (Chrome/Googlebot unterstützen es, WebP-Fallback automatisch) – Dennis hatte gefragt.
+
+**SEO-Sprint mit `audit-website`-Skill (squirrel CLI):** Audit gegen Preview (robots via `squirrel config set crawler.respect_robots false`, da Preview Crawler blockt). **Score 62→67 (D)**, harte Fehler 6→2 (Rest = Preview-only: robots-Block + Sitemap zeigt auf Live-Domain → lösen sich beim Go-Live, Crawlability springt dann 65→~95). Umgesetzt:
+- **Technik:** Kontaktformular-a11y (label `htmlFor`/`id` + Honeypot mit Accessible Name → Accessibility 92→97), Title-Doppel-Branding entfernt (Layout-Template hängt `· VandeLejk Immobilien` an – Seitentitel hatten zusätzlich „| VandeLejk"), CTA-Alt-Text.
+- **Content (Scope mit Dennis abgestimmt, Städte Hilden+Düsseldorf+Umland):** Region-Block Startseite, „So läuft Ihr Verkauf ab" (4 Schritte) + **FAQ mit `FAQPage`-JSON-LD** auf /angebot (FAQ-Quelle: `src/lib/faq.ts`, geteilt mit Schema), Erfolgsprojekte-Intro erweitert. Keyword-optimierte Titles/Meta auf allen 4 Seiten. **Kein Provisionssatz** in FAQ (Dennis-Vorgabe).
+- **Rückgängig machbar:** Rollback-Tag `pre-seo-content-2026-06-01` (Commit fe4c0a3) vor dem Content-Ausbau. Falls Vanessa die SEO-Texte nicht mag: `git reset --hard pre-seo-content-2026-06-01` + redeploy.
+
+**Offen:** LinkedIn-URL 404t für Crawler/ausgeloggte Besucher (für Dennis eingeloggt ok) – Vanessa soll öffentliche Profil-URL prüfen, sonst Icon raus. /kontakt + Startseite (295 Wörter, knapp unter 300) optional noch leicht ausbaubar.
 
 ## Zuletzt davor (2026-05-03) – Vanessa-Feedback Runde 2 + Endabnahme
 

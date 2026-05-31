@@ -262,7 +262,7 @@ export default function AngebotPage() {
                 viewport={{ once: true }}
               >
                 <p className="text-3xl text-sand mb-4 font-[300]">{s.n}</p>
-                <h3 className="text-lg text-anthrazit-dark mb-2">{s.t}</h3>
+                <h3 className="text-lg text-anthrazit-dark mb-2 sm:min-h-[3.75rem]">{s.t}</h3>
                 <p className="text-sm leading-relaxed text-anthrazit-light">{s.d}</p>
               </motion.div>
             ))}
