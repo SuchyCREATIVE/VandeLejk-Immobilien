@@ -3,8 +3,11 @@ import { requireAuth } from "@/lib/api-auth";
 import { prisma } from "@/lib/prisma";
 import { writeFile, mkdir } from "fs/promises";
 import path from "path";
+import sharp from "sharp";
 
 const UPLOADS_DIR = path.join(process.cwd(), "public", "uploads");
+const MAX_WIDTH = 2400; // Hero ist Vollbild – etwas mehr Reserve
+const WEBP_QUALITY = 80;
 
 export async function GET() {
   const { error } = await requireAuth();
@@ -27,13 +30,20 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ error: "Nur JPG, PNG oder WebP erlaubt" }, { status: 400 });
   }
 
-  const buffer = Buffer.from(await file.arrayBuffer());
   await mkdir(UPLOADS_DIR, { recursive: true });
 
-  const fileName = `hero-${Date.now()}.${ext}`;
-  await writeFile(path.join(UPLOADS_DIR, fileName), buffer);
+  // Automatisch weboptimieren: rotieren (EXIF), auf max. Breite begrenzen, WebP.
+  const optimized = await sharp(Buffer.from(await file.arrayBuffer()))
+    .rotate()
+    .resize({ width: MAX_WIDTH, withoutEnlargement: true })
+    .webp({ quality: WEBP_QUALITY })
+    .toBuffer();
 
-  const imagePath = `/uploads/${fileName}`;
+  const fileName = `hero-${Date.now()}.webp`;
+  await writeFile(path.join(UPLOADS_DIR, fileName), optimized);
+
+  // Auslieferung über /api/uploads (Next serviert dynamisch hinzugefügte public-Dateien nicht).
+  const imagePath = `/api/uploads/${fileName}`;
   await prisma.settings.upsert({
     where:  { key: "hero_image" },
     update: { value: imagePath },

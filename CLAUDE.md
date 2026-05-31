@@ -44,7 +44,7 @@
 - Fonts: Playfair Display (Headings), Jost (Body/UI)
 - Logo: Logo/SVG/VandeLejk-Logo-*.svg (schwarz/weiß/grau)
 
-## Projektstand (2026-05-03)
+## Projektstand (2026-05-31)
 - [x] Grundstruktur + Tech-Stack
 - [x] Design & Frontend
 - [x] Admin-Bereich vollständig
@@ -52,14 +52,32 @@
 - [x] WCAG / Mobile-Responsiveness
 - [x] Vanessa-Feedback Runde 1
 - [x] Vanessa-Feedback Runde 2 (Bilder, Navbar-Sharpness, Über-mich-Layout, Admin-Routing)
+- [x] Vanessa-Feedback Runde 3 (Hero-Höhe, Stats, CTA-Foto, Footer, Kontakt-Portrait, info@, Objekt-Status)
 - [x] Foto-Pipeline: sharp + WebP automatisch beim Upload (Resize 1920px, Quality 82)
 - [x] Alle bestehenden Bilder rückwirkend auf WebP migriert (~14.7 MB gespart)
 - [x] **Endabnahme durch Kundin – Vanessa ist zufrieden (2026-05-03)**
-- [ ] Live-Deploy geplant für **2026-06-01** (Kundin meldet sich nochmal separat zur Bestätigung)
-- [ ] Optional vor Live: vanessa-front.webp aus JPEG-max Original neu encodieren (siehe „Offene Punkte")
+- [ ] **NEUER Live-Termin: Freitag 2026-06-05 ca. 18 Uhr** – Vanessa gibt vorher nochmal ein „Startsignal" (vorher NICHT live!)
+- [ ] **Offen: Impressum + Datenschutz** – Dennis liefert finale e-recht24-Texte separat (DE), dann Platzhalter ersetzen
 - [ ] Optional vor Live: Google-Reviews API Key in Admin → Einstellungen
 
-## Zuletzt gemacht (2026-05-03) – Vanessa-Feedback Runde 2 + Endabnahme
+## Zuletzt gemacht (2026-05-31) – Vanessa-Feedback Runde 3 (final vor Go-Live)
+
+Quelle: E-Mail „Der Countdown läuft :-)" vom 20.05. (`Screenshots/Der Countdown läuft --).eml`), 9 markierte Screenshots. Neuer Live-Termin **05.06. ~18 Uhr**. Alles auf Preview deployt.
+
+1. **Hero-Höhe** ([HomeClient.tsx:113](src/app/HomeClient.tsx#L113)): `min-h-[70vh] justify-center` ohne Top-Padding → auf kürzeren Viewports kollidierte der zentrierte Inhalt oben mit der fixierten Navbar und unten mit dem absoluten „Entdecken"-Indikator (Eyebrow + Buttons verschwanden). Fix: `min-h-[80vh] pt-28 pb-24`, Scroll-Indikator `[@media(max-height:720px)]:hidden`.
+2. **Stats-Strip**: „Persönlich" → „Persönliches" (rendert „Persönliches Erstgespräch"). [HomeClient.tsx:195](src/app/HomeClient.tsx#L195).
+3. **CTA-Sektion „Bereit für nächsten Schritt"**: schiefes Vanessa-Foto (`vanessa-cta.webp`) entfernt, weiße Box jetzt zentriert (`flex justify-center` statt `items-end justify-end`).
+4. **Footer** ([Footer.tsx](src/components/Footer.tsx)): Adress-Block raus, stattdessen klickbare Tel `0157 752 995 23` + Mail `info@`. Adresse bleibt fürs SEO im JSON-LD (`layout.tsx`) + Impressum → Vanessas SEO-Frage damit beantwortet (Footer-Adresse nicht ranking-entscheidend). LinkedIn unverändert (funktioniert bei Dennis).
+5. **Kontakt-Seite** ([KontaktClient.tsx:90](src/app/kontakt/KontaktClient.tsx#L90)): rechteckiges `aspect-[3/4]`-Foto (`vanessa-door.webp`) → rundes Portrait `w-56 h-56 rounded-full` mit `vanessa-front.webp` (Startseiten-„Über mich"-Bild, wie von Vanessa gewünscht).
+6. **E-Mail vereinheitlicht** auf `info@vandelejk-immobilien.de` (war Build-Default `kontakt@`): JSON-LD ([layout.tsx:53](src/app/layout.tsx#L53)), Hero-Snippet ([HomeClient.tsx](src/app/HomeClient.tsx)), Kontaktseite. `kontakt@` kam nie von Vanessa – Default vom 29.04.
+7. **Objekt-Status** (Server-DB direkt per `sqlite3`, da `db:seed` existierende Rows überspringt + `*.db` vom deploy-rsync ausgeschlossen ist):
+   - „Eigentumswohnung Düsseldorf" (Röpkestraße 51): `Vorlage-Objekt` → `Verkauft`, city → `40233 Düsseldorf Flingern` (displayCity zeigt „Düsseldorf Flingern"), Beschreibung „Oberbilk" → „Flingern".
+   - „Einfamilienhaus Benrath" (Im Diepental 18): `Zu verkaufen` → `Verkauft`.
+   - `prisma/seed.ts` ebenfalls angepasst (für künftige Frisch-Seeds konsistent).
+
+**Zurückgestellt (Punkte 8+9 der Mail):** Impressum + Datenschutz – Dennis liefert finale **e-recht24-Texte separat**, dann Platzhalter ersetzen (analog Rumler). Vanessa hat Impressum-Daten bereits in der Mail mitgeliefert (Kreisverwaltung Mettmann als Aufsichtsbehörde, §34c via Kreis Mettmann/Der Landrat, IHK Düsseldorf, VSBG-Hinweis).
+
+## Zuletzt davor (2026-05-03) – Vanessa-Feedback Runde 2 + Endabnahme
 
 **Bilder Erfolgsprojekt „Benrath" – kaputte Thumbs gefixt:**
 - 5 von 9 Foto-URLs in der Server-DB zeigten auf `/api/uploads/properties/benrath-XX-rTIMESTAMP.webp` → 404, weil Vanessa die Fotos rotiert hatte und das Verzeichnis `public/uploads/` auf dem Server irgendwann (vor Einbau von `--exclude='public/uploads'` in deploy.sh) gewipt wurde.
@@ -111,15 +129,16 @@
 
 ## Als nächstes
 
-**Status: Kundin abgenommen – warten auf Live-Deploy-Freigabe.**
+**Status: Runde-3-Korrekturen auf Preview live – warten auf finale Rechtstexte + Vanessas Startsignal.**
 
-1. **Live-Deploy am 2026-06-01** – Vanessa meldet sich nochmal separat zur Bestätigung (vorher NICHT auf Live deployen!)
-2. Vor Live-Deploy idealerweise erledigen:
-   - `vanessa-front.webp` aus JPEG-max Original neu encodieren (Vanessa muss Nummer aus `Fotos/Fotoshooting 2026.02.02/JPEG-max/` nennen) – Datei ist aktuell nur 1024×1536px und wirkt auf Desktop matschig
-   - Google-Reviews API Key in Admin → Einstellungen pflegen
-   - Demo-Property „Eigentumswohnung 40215 Düsseldorf" aus DB löschen, falls Vanessa sie nicht braucht
-3. Live-Deploy: `./deploy.sh live` (NICHT vorher!)
+1. **Impressum + Datenschutz einbauen**, sobald Dennis die finalen e-recht24-Texte liefert:
+   - [src/app/impressum/page.tsx](src/app/impressum/page.tsx) – Platzhalter [Telefonnummer], [E-Mail-Adresse], Aufsichtsbehörde, §34c-Aktenzeichen
+   - [src/app/datenschutz/page.tsx](src/app/datenschutz/page.tsx) – [Monat Jahr], [E-Mail-Adresse], Platzhalter-Warnbox am Ende entfernen
+2. **Live-Deploy: Freitag 2026-06-05 ca. 18 Uhr** – Vanessa gibt vorher nochmal ein „Startsignal" (vorher NICHT auf Live deployen!). `./deploy.sh live`
+3. Optional vor Live: Google-Reviews API Key in Admin → Einstellungen pflegen.
 4. Nach Live-Deploy: SEO-Standard-Checks (siehe `feedback_seo_baseline.md` im globalen Memory) – Search Console Property + Sitemap, ggf. PageSpeed-Run.
+
+**Vanessa-Rückmeldung an sie (offene Antworten):** LinkedIn funktioniert (war wohl temporär), Footer-Adresse nicht SEO-entscheidend (steckt im JSON-LD), `kontakt@`→`info@` korrigiert.
 
 ## Admin-Zugang (Preview)
 - URL: https://vandelejk-immobilien.scpreview.de/admin

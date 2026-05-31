@@ -114,8 +114,9 @@ export default function HomeClient() {
         <div className="absolute inset-0">
           <Image
             src={heroImage}
-            alt="VandeLejk Immobilien"
+            alt="Immobilienmaklerin Vanessa Lejk – VandeLejk Immobilien in Hilden"
             fill
+            quality={65}
             className="object-cover object-center"
             priority
             sizes="100vw"
