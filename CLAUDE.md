@@ -77,6 +77,14 @@ Quelle: E-Mail „Der Countdown läuft :-)" vom 20.05. (`Screenshots/Der Countdo
 
 **Zurückgestellt (Punkte 8+9 der Mail):** Impressum + Datenschutz – Dennis liefert finale **e-recht24-Texte separat**, dann Platzhalter ersetzen (analog Rumler). Vanessa hat Impressum-Daten bereits in der Mail mitgeliefert (Kreisverwaltung Mettmann als Aufsichtsbehörde, §34c via Kreis Mettmann/Der Landrat, IHK Düsseldorf, VSBG-Hinweis).
 
+**Bild-Performance (gleiche Session, Dennis-Report „Hero lädt langsam"):** Hero wurde mit 336 KB WebP ausgeliefert, Next lieferte **kein AVIF** (nicht konfiguriert). Fix:
+- `next.config.ts`: `images.formats = ["image/avif","image/webp"]` + `qualities: [65,75,85,90,95]` (Next 16 erfordert quality-Allowlist). → ganze Seite liefert jetzt AVIF, global ~30-50 % kleiner.
+- Hero-`<Image>` auf `quality={65}` (liegt hinter 55 % Dunkel-Overlay → kein sichtbarer Verlust) + beschreibender Alt-Text mit „Hilden".
+- **Hero-Upload-Route** ([api/admin/hero-image/route.ts](src/app/api/admin/hero-image/route.ts)) speicherte Originale unoptimiert unter `/uploads/` (404-Gefahr in Prod). Jetzt `sharp().rotate().resize(2400).webp(80)` wie die Property-Fotos + Auslieferung über `/api/uploads/...`. → Auto-WebP bei jedem Upload, in ALLEN Upload-Routen.
+- **Ergebnis gemessen:** Hero 336 KB → **195 KB AVIF** (~42 % leichter), WebP-Fallback 304 KB.
+
+**PDF-Broschüren (BOTTIMMO, von Vanessa beigelegt):** Einsteiger-Marketing-Material. Wir sind technisch bereits darüber (JSON-LD, WebP/AVIF, UX, Person-forward, lokal). Echte Rest-Wins laut Heften = On-Page-SEO-Feintuning: keyword-stärkere Title/Meta („Immobilienmaklerin Hilden") + beschreibende Alt-Texte. Optional als eigener Schritt (Dennis entscheidet), deckt sich mit `feedback_seo_baseline`.
+
 ## Zuletzt davor (2026-05-03) – Vanessa-Feedback Runde 2 + Endabnahme
 
 **Bilder Erfolgsprojekt „Benrath" – kaputte Thumbs gefixt:**

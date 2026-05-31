@@ -79,6 +79,24 @@ done
 echo ""
 if [ "$STATUS" = "200" ]; then
   echo "✓ Deployed: $URL"
+
+  # Bild-Cache vorwärmen: der next/image-Optimizer encodiert AVIF beim 1. Aufruf
+  # (~3s auf dem schwachen Shared-Host). Wir holen die /_next/image-URLs der
+  # Hauptseiten und encodieren sie vorab, damit kein echter Besucher wartet.
+  echo "▶ Bild-Cache vorwärmen (AVIF/WebP)..."
+  WARMED=0
+  for PAGE in "" "kontakt" "angebot" "erfolgsprojekte"; do
+    IMGS=$(curl -s "${URL}/${PAGE}" \
+      | grep -oE '/_next/image\?url=[^ "\\]+' \
+      | sed 's/&amp;/\&/g' \
+      | sort -u)
+    for IMG in $IMGS; do
+      curl -s -o /dev/null -H "Accept: image/avif,image/webp,*/*" "${URL}${IMG}"
+      curl -s -o /dev/null -H "Accept: image/webp,*/*"            "${URL}${IMG}"
+      WARMED=$((WARMED + 1))
+    done
+  done
+  echo "✓ Bild-Cache vorgewärmt ($WARMED Varianten)"
 else
   echo "⚠ Deploy abgeschlossen, aber Seite antwortet noch nicht (HTTP $STATUS). Bitte in ~30s erneut laden."
 fi

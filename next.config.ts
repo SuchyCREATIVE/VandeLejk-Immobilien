@@ -6,6 +6,12 @@ const nextConfig: NextConfig = {
     formats: ["image/avif", "image/webp"],
     // Next 16 erfordert eine Allowlist für genutzte quality-Werte.
     qualities: [65, 75, 85, 90, 95],
+    // Weniger Größenvarianten = weniger CPU-teure AVIF-Encodes auf dem schwachen
+    // Shared-Host (Default sind 8 deviceSizes + 8 imageSizes).
+    deviceSizes: [640, 828, 1080, 1920],
+    imageSizes: [256, 384],
+    // Einmal encodierte Varianten möglichst lange behalten (1 Jahr).
+    minimumCacheTTL: 31536000,
   },
 };
 
