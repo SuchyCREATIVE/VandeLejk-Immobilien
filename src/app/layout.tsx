@@ -50,7 +50,7 @@ const jsonLd = {
   description:
     "Persönliche Immobilienberatung in Hilden und Umgebung. Kaufen, verkaufen, vermieten – mit Herz, Expertise und echtem Engagement.",
   url: "https://vandelejk-immobilien.de",
-  email: "kontakt@vandelejk-immobilien.de",
+  email: "info@vandelejk-immobilien.de",
   address: {
     "@type": "PostalAddress",
     streetAddress: "Niedenstraße 113",

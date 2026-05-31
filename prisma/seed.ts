@@ -68,16 +68,16 @@ async function main() {
   ]);
   const roepkeData = {
     address:     "Röpkestraße 51",
-    city:        "40215 Düsseldorf",
+    city:        "40233 Düsseldorf Flingern",
     type:        "Eigentumswohnung",
-    status:      "Vorlage-Objekt",
+    status:      "Verkauft",
     price:       "auf Anfrage",
     area:        "82 m²",
     rooms:       3,
     bathrooms:   1,
     floor:       "2. Obergeschoss",
     yearBuilt:   "1975 (Kernsaniert 2019)",
-    description: "Diese gepflegte Eigentumswohnung befindet sich in einer ruhigen Seitenstraße im Herzen von Düsseldorf-Oberbilk. Die helle, gut geschnittene Wohnung überzeugt durch ihre moderne Ausstattung und den praktischen Grundriss.\n\nDas Wohnzimmer ist geräumig und lichtdurchflutet, die Küche vollständig eingebaut und funktional. Beide Schlafzimmer bieten ausreichend Platz, das Badezimmer ist hochwertig gefliest und mit ebenerdiger Dusche ausgestattet.\n\nEin Kellerabteil und ein Stellplatz im Innenhof runden das Angebot ab. Die Lage in unmittelbarer Nähe zu öffentlichen Verkehrsmitteln, Einkaufsmöglichkeiten und Schulen macht diese Wohnung besonders attraktiv.",
+    description: "Diese gepflegte Eigentumswohnung befindet sich in einer ruhigen Seitenstraße im Herzen von Düsseldorf-Flingern. Die helle, gut geschnittene Wohnung überzeugt durch ihre moderne Ausstattung und den praktischen Grundriss.\n\nDas Wohnzimmer ist geräumig und lichtdurchflutet, die Küche vollständig eingebaut und funktional. Beide Schlafzimmer bieten ausreichend Platz, das Badezimmer ist hochwertig gefliest und mit ebenerdiger Dusche ausgestattet.\n\nEin Kellerabteil und ein Stellplatz im Innenhof runden das Angebot ab. Die Lage in unmittelbarer Nähe zu öffentlichen Verkehrsmitteln, Einkaufsmöglichkeiten und Schulen macht diese Wohnung besonders attraktiv.",
     highlights:  JSON.stringify([
       "Vollständig modernisiert",
       "Einbauküche inklusive",
@@ -116,7 +116,7 @@ async function main() {
     address:     "Im Diepental 18",
     city:        "40597 Düsseldorf-Benrath",
     type:        "Einfamilienhaus",
-    status:      "Zu verkaufen",
+    status:      "Verkauft",
     price:       "auf Anfrage",
     area:        "340 m²",
     rooms:       7,

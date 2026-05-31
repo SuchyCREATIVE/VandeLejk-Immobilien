@@ -44,21 +44,41 @@
 - Fonts: Playfair Display (Headings), Jost (Body/UI)
 - Logo: Logo/SVG/VandeLejk-Logo-*.svg (schwarz/weiß/grau)
 
-## Projektstand (2026-04-29)
+## Projektstand (2026-05-03)
 - [x] Grundstruktur + Tech-Stack
 - [x] Design & Frontend
 - [x] Admin-Bereich vollständig
 - [x] SEO (dynamische robots.ts unter src/app/, sitemap, JSON-LD, Meta)
 - [x] WCAG / Mobile-Responsiveness
-- [x] **Vanessa-Feedback Runde 1** (siehe „Zuletzt gemacht")
+- [x] Vanessa-Feedback Runde 1
+- [x] Vanessa-Feedback Runde 2 (Bilder, Navbar-Sharpness, Über-mich-Layout, Admin-Routing)
 - [x] Foto-Pipeline: sharp + WebP automatisch beim Upload (Resize 1920px, Quality 82)
 - [x] Alle bestehenden Bilder rückwirkend auf WebP migriert (~14.7 MB gespart)
-- [ ] Vanessa pflegt echte Erfolgsprojekte ein
-- [ ] Google-Reviews API Key in Admin → Einstellungen
-- [ ] Endabnahme auf scpreview durch Kundin
-- [ ] Live-Deploy (erst nach Freigabe durch Dennis!)
+- [x] **Endabnahme durch Kundin – Vanessa ist zufrieden (2026-05-03)**
+- [ ] Live-Deploy geplant für **2026-06-01** (Kundin meldet sich nochmal separat zur Bestätigung)
+- [ ] Optional vor Live: vanessa-front.webp aus JPEG-max Original neu encodieren (siehe „Offene Punkte")
+- [ ] Optional vor Live: Google-Reviews API Key in Admin → Einstellungen
 
-## Zuletzt gemacht (2026-04-29) – Vanessa-Feedback Runde 1
+## Zuletzt gemacht (2026-05-03) – Vanessa-Feedback Runde 2 + Endabnahme
+
+**Bilder Erfolgsprojekt „Benrath" – kaputte Thumbs gefixt:**
+- 5 von 9 Foto-URLs in der Server-DB zeigten auf `/api/uploads/properties/benrath-XX-rTIMESTAMP.webp` → 404, weil Vanessa die Fotos rotiert hatte und das Verzeichnis `public/uploads/` auf dem Server irgendwann (vor Einbau von `--exclude='public/uploads'` in deploy.sh) gewipt wurde.
+- Fix: per `sqlite3` direkt auf Preview-DB die 5 kaputten Pfade auf die Originale unter `/images/immobilien/benrath/benrath-XX.webp` zurückgesetzt. Verzeichnis `public/uploads/properties/` auf dem Server vorsorglich neu angelegt.
+- **Lehre:** Vanessas Rotationen sind unwiederbringlich verloren – sie kann bei Bedarf neu rotieren, jetzt sind die Files durch deploy.sh-Exclude geschützt.
+
+**Admin-Routing-Bug in [src/app/(admin)/admin/erfolgsprojekte/page.tsx](src/app/(admin)/admin/erfolgsprojekte/page.tsx):** Stift-Icon routete noch auf alten Pfad `/admin/immobilien/${id}` → 404. Korrigiert auf `/admin/erfolgsprojekte/${id}`.
+
+**Navbar-Schärfeproblem ([src/components/Navbar.tsx](src/components/Navbar.tsx)):** Beim Scrollen wurden Logo + Menüpunkte leicht unscharf, Ursache war `backdrop-blur-md` im scrolled-State (Compositing-Layer-Wechsel führt zu Sub-Pixel-Anti-Aliasing der SVG-/Text-Kanten). Lösung: Blur komplett raus, Hintergrund durchgängig `bg-white`, nur die Schatten-Intensität wechselt zwischen scrolled/non-scrolled. Visuell identisch, ohne Layer-Wechsel.
+
+**Über-mich-Section auf der Startseite ([src/app/HomeClient.tsx](src/app/HomeClient.tsx) ca. Z.277-298):**
+- Spaltenaufteilung von `55%/45%` auf `40%/60%` (Foto schmaler, Text mehr Raum) → Bild rendert kleiner = automatisch schärfer.
+- Text-Container zusätzlich mit `max-w-xl` begrenzt, damit der Fließtext nicht in voller 60%-Breite ausläuft (zu „atemlos" gewirkt).
+- Bild bleibt mit `object-top` verankert (Kopf muss sichtbar bleiben) – ein zwischenzeitlicher Versuch mit `object-center` hat den Kopf abgeschnitten.
+- min-height der Foto-Spalte auf `lg:min-h-[760px]` erhöht.
+
+**Offen: Bildqualität `vanessa-front.webp`:** Datei ist nur **1024×1536px** (vermutlich aus WhatsApp/iCloud kopiert). Die Originale liegen im Repo unter `Fotos/Fotoshooting 2026.02.02/JPEG-max/` als `Vanessa-Lajk-02022026-NNNNN.jpg` mit voller Auflösung. Vanessa muss noch sagen, welche Nummer dem aktuellen Frontportrait entspricht – dann aus dem Original neu encodieren (z.B. ~1600px breit, q88) für knackige Darstellung auf Desktop.
+
+## Zuletzt davor (2026-04-29) – Vanessa-Feedback Runde 1
 
 **Texte / Frontend:**
 - Wort „kostenlos" überall raus (Premium-Positionierung) → „persönlich/exklusiv/fundiert"
@@ -91,12 +111,15 @@
 
 ## Als nächstes
 
-1. Vanessa öffnet Preview mit Hard-Reload (`Cmd+Shift+R`) und prüft die Runde 1
-2. Falls Thumbs trotz Hard-Reload leer sind → Playwright-Debug in der Browser-Konsole
-3. Vanessa kann jetzt echte Erfolgsprojekte einpflegen (Foto-Upload optimiert automatisch)
-4. Demo-Property „Eigentumswohnung 40215 Düsseldorf" hatte verwaiste PNG-Verweise – wurden aus DB bereinigt; ggf. ganz löschen
-5. Google-Reviews API Key
-6. Endabnahme + Live-Deploy
+**Status: Kundin abgenommen – warten auf Live-Deploy-Freigabe.**
+
+1. **Live-Deploy am 2026-06-01** – Vanessa meldet sich nochmal separat zur Bestätigung (vorher NICHT auf Live deployen!)
+2. Vor Live-Deploy idealerweise erledigen:
+   - `vanessa-front.webp` aus JPEG-max Original neu encodieren (Vanessa muss Nummer aus `Fotos/Fotoshooting 2026.02.02/JPEG-max/` nennen) – Datei ist aktuell nur 1024×1536px und wirkt auf Desktop matschig
+   - Google-Reviews API Key in Admin → Einstellungen pflegen
+   - Demo-Property „Eigentumswohnung 40215 Düsseldorf" aus DB löschen, falls Vanessa sie nicht braucht
+3. Live-Deploy: `./deploy.sh live` (NICHT vorher!)
+4. Nach Live-Deploy: SEO-Standard-Checks (siehe `feedback_seo_baseline.md` im globalen Memory) – Search Console Property + Sitemap, ggf. PageSpeed-Run.
 
 ## Admin-Zugang (Preview)
 - URL: https://vandelejk-immobilien.scpreview.de/admin

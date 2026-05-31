@@ -86,15 +86,15 @@ export default function KontaktPage() {
               variants={fadeUp(0)} initial="hidden" whileInView="visible"
               viewport={{ once: true }}
             >
-              {/* Portrait */}
-              <div className="relative aspect-[3/4] overflow-hidden mb-8">
+              {/* Portrait – rund */}
+              <div className="relative w-56 h-56 mx-auto rounded-full overflow-hidden mb-8">
                 <Image
-                  src="/images/vanessa/vanessa-door.webp"
+                  src="/images/vanessa/vanessa-front.webp"
                   alt="Vanessa Lejk"
                   fill
                   quality={95}
                   className="object-cover object-top"
-                  sizes="(max-width: 768px) 100vw, 480px"
+                  sizes="224px"
                 />
               </div>
 
@@ -112,11 +112,11 @@ export default function KontaktPage() {
                   0157 752 995 23
                 </a>
                 <a
-                  href="mailto:kontakt@vandelejk-immobilien.de"
+                  href="mailto:info@vandelejk-immobilien.de"
                   className="flex items-start gap-3 text-sm text-anthrazit-light hover:text-anthrazit transition-colors"
                 >
                   <Mail size={14} className="text-sand mt-0.5 shrink-0" />
-                  kontakt@vandelejk-immobilien.de
+                  info@vandelejk-immobilien.de
                 </a>
               </div>
 

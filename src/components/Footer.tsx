@@ -1,5 +1,6 @@
 import Link from "next/link";
 import Image from "next/image";
+import { Phone, Mail } from "lucide-react";
 
 function IconInstagram({ size = 17 }: { size?: number }) {
   return (
@@ -105,11 +106,21 @@ export default function Footer() {
             <h4 className="text-white text-[10px] tracking-[0.25em] uppercase mb-5">
               Kontakt
             </h4>
-            <address className="text-sm not-italic leading-relaxed space-y-1">
-              <p>VandeLejk Immobilien</p>
-              <p>Vanessa Lejk</p>
-              <p>Niedenstraße 113</p>
-              <p>40721 Hilden</p>
+            <address className="text-sm not-italic leading-relaxed space-y-3">
+              <a
+                href="tel:+4915775299523"
+                className="flex items-center justify-center md:justify-start gap-3 hover:text-white transition-colors duration-200"
+              >
+                <Phone size={14} className="shrink-0" />
+                0157 752 995 23
+              </a>
+              <a
+                href="mailto:info@vandelejk-immobilien.de"
+                className="flex items-center justify-center md:justify-start gap-3 hover:text-white transition-colors duration-200"
+              >
+                <Mail size={14} className="shrink-0" />
+                info@vandelejk-immobilien.de
+              </a>
             </address>
           </div>
         </div>

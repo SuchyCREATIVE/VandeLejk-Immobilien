@@ -110,7 +110,7 @@ export default function HomeClient() {
       {/* ══════════════════════════════════════════════════════════
           HERO – 70 % Viewport-Höhe
       ══════════════════════════════════════════════════════════ */}
-      <section className="relative min-h-[70vh] flex flex-col items-center justify-center overflow-hidden">
+      <section className="relative min-h-[80vh] flex flex-col items-center justify-center pt-28 pb-24 overflow-hidden">
         <div className="absolute inset-0">
           <Image
             src={heroImage}
@@ -172,7 +172,7 @@ export default function HomeClient() {
 
         <motion.div
           variants={fadeIn(0.8)} initial="hidden" animate="visible"
-          className="absolute bottom-8 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2 text-white/60"
+          className="absolute bottom-8 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2 text-white/60 [@media(max-height:720px)]:hidden"
         >
           <span className="text-[11px] tracking-[0.3em] uppercase">Entdecken</span>
           <motion.div
@@ -192,7 +192,7 @@ export default function HomeClient() {
           {[
             { value: `${totalRatings}`,           label: "Google-Bewertungen" },
             { value: `${rating.toFixed(1)}\u00a0★`, label: "Ø Bewertung" },
-            { value: "Persönlich",                 label: "Erstgespräch" },
+            { value: "Persönliches",               label: "Erstgespräch" },
           ].map((stat, i) => (
             <motion.div
               key={stat.label}
@@ -350,11 +350,11 @@ export default function HomeClient() {
                 0157 752 995 23
               </a>
               <a
-                href="mailto:kontakt@vandelejk-immobilien.de"
+                href="mailto:info@vandelejk-immobilien.de"
                 className="inline-flex items-center gap-2 text-sm text-anthrazit-light hover:text-anthrazit transition-colors"
               >
                 <Mail size={14} className="text-sand shrink-0" />
-                kontakt@vandelejk-immobilien.de
+                info@vandelejk-immobilien.de
               </a>
             </div>
           </motion.div>
@@ -527,24 +527,7 @@ export default function HomeClient() {
 
         {/* Inhalt */}
         <div className="relative z-10 max-w-6xl mx-auto px-6">
-          <div className="flex flex-col md:flex-row items-end justify-end gap-0">
-
-            {/* Vanessa – schwebendes Hochformat-Foto */}
-            <motion.div
-              variants={fadeIn(0)} initial="hidden" whileInView="visible"
-              viewport={{ once: true }}
-              className="hidden md:block relative w-52 lg:w-64 shrink-0 self-end"
-              style={{ height: "360px" }}
-            >
-              <Image
-                src="/images/vanessa/vanessa-cta.webp"
-                quality={90}
-                alt="Vanessa Lejk"
-                fill
-                className="object-cover object-top"
-                sizes="(max-width: 768px) 0px, 512px"
-              />
-            </motion.div>
+          <div className="flex justify-center">
 
             {/* Weiße Content-Box */}
             <motion.div
