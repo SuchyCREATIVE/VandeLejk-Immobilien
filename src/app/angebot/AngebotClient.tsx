@@ -5,9 +5,10 @@ import Image from "next/image";
 import Link from "next/link";
 import {
   Home, TrendingUp, Key, ClipboardCheck, MessageSquare,
-  Camera, FileText, ArrowRight, CheckCircle2
+  Camera, FileText, ArrowRight, CheckCircle2, Plus
 } from "lucide-react";
 import { fadeUp } from "@/lib/animations";
+import { FAQS } from "@/lib/faq";
 
 const SERVICES = [
   {
@@ -233,8 +234,44 @@ export default function AngebotPage() {
         </div>
       </section>
 
+      {/* ─── Ablauf – So läuft Ihr Verkauf ab ───────────────────── */}
+      <section className="py-24 px-6 bg-white mt-24">
+        <div className="max-w-5xl mx-auto">
+          <motion.div
+            variants={fadeUp()} initial="hidden" whileInView="visible"
+            viewport={{ once: true }}
+            className="text-center mb-16"
+          >
+            <p className="text-[10px] tracking-[0.35em] uppercase text-sand mb-4">
+              Ihr Weg zum Abschluss
+            </p>
+            <h2 className="text-3xl md:text-4xl text-anthrazit-dark">
+              So läuft Ihr Verkauf ab
+            </h2>
+          </motion.div>
+          <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-10">
+            {[
+              { n: "01", t: "Erstgespräch & Wertermittlung", d: "Wir lernen uns kennen, ich sehe mir Ihre Immobilie an und ermittle einen fundierten, marktgerechten Preis." },
+              { n: "02", t: "Vermarktung", d: "Hochwertige Fotos, aussagekräftiges Exposé und gezielte Ansprache der passenden Interessenten." },
+              { n: "03", t: "Besichtigungen & Verhandlung", d: "Ich übernehme die Termine, filtere ernsthafte Käufer und verhandle in Ihrem Interesse." },
+              { n: "04", t: "Abschluss", d: "Vom notariellen Kaufvertrag bis zur Schlüsselübergabe begleite ich die gesamte Abwicklung." },
+            ].map((s, i) => (
+              <motion.div
+                key={s.n}
+                variants={fadeUp(i * 0.08)} initial="hidden" whileInView="visible"
+                viewport={{ once: true }}
+              >
+                <p className="text-3xl text-sand mb-4 font-[300]">{s.n}</p>
+                <h3 className="text-lg text-anthrazit-dark mb-2">{s.t}</h3>
+                <p className="text-sm leading-relaxed text-anthrazit-light">{s.d}</p>
+              </motion.div>
+            ))}
+          </div>
+        </div>
+      </section>
+
       {/* ─── Wichtige Info ──────────────────────────────────────── */}
-      <section className="py-16 px-6 bg-beige mt-24">
+      <section className="py-16 px-6 bg-beige">
         <div className="max-w-3xl mx-auto">
           <motion.div
             variants={fadeUp()} initial="hidden" whileInView="visible"
@@ -251,6 +288,37 @@ export default function AngebotPage() {
               </p>
             </div>
           </motion.div>
+        </div>
+      </section>
+
+      {/* ─── FAQ ────────────────────────────────────────────────── */}
+      <section className="py-24 px-6 bg-cream">
+        <div className="max-w-3xl mx-auto">
+          <motion.div
+            variants={fadeUp()} initial="hidden" whileInView="visible"
+            viewport={{ once: true }}
+            className="text-center mb-14"
+          >
+            <p className="text-[10px] tracking-[0.35em] uppercase text-sand mb-4">
+              Häufige Fragen
+            </p>
+            <h2 className="text-3xl md:text-4xl text-anthrazit-dark">
+              Gut zu wissen
+            </h2>
+          </motion.div>
+          <div className="border-t border-sand/25">
+            {FAQS.map((f) => (
+              <details key={f.q} className="group border-b border-sand/25 py-5">
+                <summary className="flex items-center justify-between cursor-pointer list-none text-anthrazit-dark text-[15px] [&::-webkit-details-marker]:hidden">
+                  <span>{f.q}</span>
+                  <Plus size={16} className="text-sand shrink-0 ml-4 transition-transform duration-300 group-open:rotate-45" />
+                </summary>
+                <p className="mt-4 text-sm leading-relaxed text-anthrazit-light">
+                  {f.a}
+                </p>
+              </details>
+            ))}
+          </div>
         </div>
       </section>
 

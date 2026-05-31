@@ -363,6 +363,36 @@ export default function HomeClient() {
       </section>
 
       {/* ══════════════════════════════════════════════════════════
+          REGION – Lokaler Bezug (SEO: Hilden / Düsseldorf / Umland)
+      ══════════════════════════════════════════════════════════ */}
+      <section className="py-28 px-6 bg-cream">
+        <div className="max-w-3xl mx-auto text-center">
+          <motion.div
+            variants={fadeUp(0)} initial="hidden" whileInView="visible"
+            viewport={{ once: true }}
+          >
+            <p className="text-[10px] tracking-[0.35em] uppercase text-sand mb-5">
+              Ihre Region
+            </p>
+            <h2 className="text-3xl md:text-4xl text-anthrazit-dark mb-6">
+              Maklerin für Hilden, Düsseldorf<br className="hidden sm:block" />
+              {" "}und das Bergische Umland
+            </h2>
+            <div className="w-10 h-px bg-sand mx-auto mb-8" />
+            <p className="text-[15px] leading-relaxed text-anthrazit-light">
+              Als ortskundige Immobilienmaklerin kenne ich den Markt in Hilden und der
+              gesamten Region – von Düsseldorf über Ratingen und Erkrath bis Langenfeld.
+              Diese Nähe ist Ihr Vorteil: Ich weiß, was Immobilien hier wert sind, wer die
+              passenden Käufer sind und worauf es bei einem reibungslosen Verkauf ankommt.
+              Ob Eigentumswohnung, Einfamilienhaus oder Kapitalanlage – Sie bekommen eine
+              Ansprechpartnerin, die zuhört, ehrlich berät und Sie vom ersten Gespräch bis
+              zur Schlüsselübergabe persönlich begleitet.
+            </p>
+          </motion.div>
+        </div>
+      </section>
+
+      {/* ══════════════════════════════════════════════════════════
           IMMOBILIEN FEATURE – Hell, Bild eingefasst
       ══════════════════════════════════════════════════════════ */}
       <section className="py-36 px-6 bg-white">

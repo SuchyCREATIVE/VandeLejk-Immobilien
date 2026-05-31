@@ -250,10 +250,14 @@ export default function ImmobilienPage() {
           </motion.h1>
           <motion.p
             variants={fadeUp(0.2)} initial="hidden" animate="visible"
-            className="text-[15px] leading-relaxed text-anthrazit-light max-w-xl"
+            className="text-[15px] leading-relaxed text-anthrazit-light max-w-2xl"
           >
-            Ein Einblick in Objekte, die ich erfolgreich begleitet habe –
-            mit Stimmen meiner Eigentümer.
+            Vertrauen entsteht durch Ergebnisse. Hier finden Sie eine Auswahl von
+            Immobilien, die ich in Hilden, Düsseldorf und Umgebung erfolgreich
+            vermittelt habe – jeweils mit den Worten der Eigentümer, die mir ihre
+            Immobilie anvertraut haben. Jedes Objekt steht für persönliche
+            Betreuung, sorgfältige Vermarktung und einen Abschluss, mit dem am
+            Ende alle zufrieden waren.
           </motion.p>
         </div>
       </section>

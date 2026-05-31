@@ -2,9 +2,9 @@ import type { Metadata } from "next";
 import KontaktClient from "./KontaktClient";
 
 export const metadata: Metadata = {
-  title: "Kontakt – VandeLejk Immobilien Hilden",
+  title: "Kontakt – Immobilienmaklerin Hilden",
   description:
-    "Vereinbaren Sie ein persönliches Erstgespräch mit Vanessa Lejk. Persönliche Immobilienberatung in Hilden – jetzt Kontakt aufnehmen.",
+    "Sie möchten Ihre Immobilie verkaufen oder suchen Beratung in Hilden & Düsseldorf? Schreiben Sie mir – ich melde mich persönlich bei Ihnen.",
   alternates: {
     canonical: "https://vandelejk-immobilien.de/kontakt",
   },

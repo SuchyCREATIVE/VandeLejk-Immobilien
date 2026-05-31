@@ -23,11 +23,11 @@ export const metadata: Metadata = {
     process.env.NEXT_PUBLIC_SITE_URL ?? "https://vandelejk-immobilien.de"
   ),
   title: {
-    default: "VandeLejk Immobilien – Vanessa Lejk",
+    default: "VandeLejk Immobilien – Immobilienmaklerin Hilden & Düsseldorf",
     template: "%s · VandeLejk Immobilien",
   },
   description:
-    "Persönliche Immobilienberatung in Hilden und Umgebung. Kaufen, verkaufen, vermieten – mit Herz, Expertise und echtem Engagement.",
+    "Ihre Immobilienmaklerin für Hilden, Düsseldorf & Umgebung. Persönliche Begleitung beim Verkaufen, Kaufen, Bewerten und Vermieten – mit Herz und Expertise.",
   openGraph: {
     siteName: "VandeLejk Immobilien",
     locale: "de_DE",
