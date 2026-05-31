@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import ImmobilienClient from "./ImmobilienClient";
 
 export const metadata: Metadata = {
-  title: "Erfolgsprojekte – Verkaufte Immobilien | VandeLejk",
+  title: "Verkaufte Immobilien & Referenzen",
   description:
     "Ein Einblick in bereits erfolgreich verkaufte Objekte – mit Stimmen meiner Eigentümer. Persönlich begleitet, sorgfältig vermarktet.",
   alternates: {

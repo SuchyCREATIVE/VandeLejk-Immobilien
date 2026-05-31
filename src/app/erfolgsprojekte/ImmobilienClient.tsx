@@ -81,7 +81,7 @@ function Gallery({ photos, city, type }: { photos: string[]; city: string; type:
               alt={`${type} in ${city} – Foto ${active + 1}`}
               fill
               className="object-cover"
-              quality={90}
+              quality={80}
               sizes="(max-width: 768px) 100vw, 60vw"
             />
           </motion.div>
@@ -154,7 +154,7 @@ function Gallery({ photos, city, type }: { photos: string[]; city: string; type:
                 alt={`${type} in ${city} – Foto ${lightbox + 1}`}
                 fill
                 className="object-contain"
-                quality={90}
+                quality={80}
                 sizes="90vw"
               />
             </div>

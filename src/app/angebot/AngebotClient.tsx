@@ -104,7 +104,7 @@ export default function AngebotPage() {
             alt="VandeLejk Immobilien"
             fill
             className="object-cover object-center"
-            quality={90}
+            quality={80}
             sizes="100vw"
             priority
           />
@@ -204,7 +204,7 @@ export default function AngebotPage() {
                 alt="Vanessa Lejk – Immobilienmaklerin"
                 fill
                 className="object-cover object-top"
-                quality={90}
+                quality={80}
                 sizes="(max-width: 768px) 100vw, 50vw"
               />
             </div>

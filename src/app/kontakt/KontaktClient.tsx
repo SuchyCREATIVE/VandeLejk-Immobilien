@@ -92,7 +92,7 @@ export default function KontaktPage() {
                   src="/images/vanessa/vanessa-front.webp"
                   alt="Vanessa Lejk"
                   fill
-                  quality={95}
+                  quality={80}
                   className="object-cover object-top"
                   sizes="224px"
                 />
@@ -151,22 +151,25 @@ export default function KontaktPage() {
                 </div>
               ) : (
                 <form onSubmit={handleSubmit(onSubmit)} className="space-y-5" noValidate>
-                  {/* Honeypot */}
+                  {/* Honeypot (Spam-Falle) – für Menschen unsichtbar, aber mit
+                      Accessible Name, damit Screenreader/Audits es einordnen können */}
                   <input
                     {...register("hp_field")}
+                    id="hp_field"
                     type="text"
                     tabIndex={-1}
                     autoComplete="off"
-                    aria-hidden="true"
+                    aria-label="Dieses Feld bitte leer lassen"
                     className="hidden"
                   />
 
                   {/* Vorname + Nachname */}
                   <div className="grid sm:grid-cols-2 gap-5">
                     <div>
-                      <label className={labelCls}>Vorname *</label>
+                      <label htmlFor="firstname" className={labelCls}>Vorname *</label>
                       <input
                         {...register("firstname")}
+                        id="firstname"
                         type="text"
                         placeholder="Vorname"
                         className={inputCls}
@@ -176,9 +179,10 @@ export default function KontaktPage() {
                       )}
                     </div>
                     <div>
-                      <label className={labelCls}>Nachname *</label>
+                      <label htmlFor="lastname" className={labelCls}>Nachname *</label>
                       <input
                         {...register("lastname")}
+                        id="lastname"
                         type="text"
                         placeholder="Nachname"
                         className={inputCls}
@@ -192,9 +196,10 @@ export default function KontaktPage() {
                   {/* E-Mail + Telefon */}
                   <div className="grid sm:grid-cols-2 gap-5">
                     <div>
-                      <label className={labelCls}>E-Mail *</label>
+                      <label htmlFor="email" className={labelCls}>E-Mail *</label>
                       <input
                         {...register("email")}
+                        id="email"
                         type="email"
                         placeholder="ihre@email.de"
                         className={inputCls}
@@ -204,9 +209,10 @@ export default function KontaktPage() {
                       )}
                     </div>
                     <div>
-                      <label className={labelCls}>Telefon *</label>
+                      <label htmlFor="phone" className={labelCls}>Telefon *</label>
                       <input
                         {...register("phone")}
+                        id="phone"
                         type="tel"
                         placeholder="+49 211 ..."
                         className={inputCls}
@@ -219,9 +225,10 @@ export default function KontaktPage() {
 
                   {/* Nachricht */}
                   <div>
-                    <label className={labelCls}>Ihre Nachricht *</label>
+                    <label htmlFor="message" className={labelCls}>Ihre Nachricht *</label>
                     <textarea
                       {...register("message")}
+                      id="message"
                       rows={6}
                       placeholder="Wie kann ich Ihnen helfen? Bitte beschreiben Sie Ihr Anliegen…"
                       className={`${inputCls} resize-none`}

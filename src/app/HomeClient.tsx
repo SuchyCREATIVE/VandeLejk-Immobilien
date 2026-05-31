@@ -285,7 +285,7 @@ export default function HomeClient() {
           >
             <Image
               src="/images/vanessa/vanessa-front.webp"
-              quality={90}
+              quality={80}
               alt="Vanessa Lejk – VandeLejk Immobilien"
               fill
               className="object-cover object-top"
@@ -518,7 +518,7 @@ export default function HomeClient() {
         <div className="absolute inset-0">
           <Image
             src="/images/immobilien/cta-background.webp"
-            alt=""
+            alt="Modernes Wohnzimmer einer von VandeLejk Immobilien vermittelten Immobilie"
             fill
             className="object-cover object-center"
             sizes="100vw"

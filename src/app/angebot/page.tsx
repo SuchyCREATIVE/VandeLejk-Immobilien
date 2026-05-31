@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import AngebotClient from "./AngebotClient";
 
 export const metadata: Metadata = {
-  title: "Leistungen – Kauf, Verkauf & Vermietung | VandeLejk",
+  title: "Kauf, Verkauf & Vermietung in Hilden",
   description:
     "Von der Wertermittlung bis zum Notartermin: alle Immobilien-Leistungen von VandeLejk Immobilien auf einen Blick.",
   alternates: {
