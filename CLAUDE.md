@@ -106,7 +106,9 @@ Quelle: E-Mail „Der Countdown läuft :-)" vom 20.05. (`Screenshots/Der Countdo
   - Öffentlicher Endpunkt `GET /api/settings/turnstile` liefert NUR `{enabled, siteKey}` (Secret bleibt serverseitig).
   - Frontend [KontaktClient.tsx](src/app/kontakt/KontaktClient.tsx): lädt Widget via `next/script` nur wenn aktiviert, Token wird mitgesendet, Submit blockt ohne Token, Reset bei Fehler.
   - Serverseitige Verifikation in [api/contact/route.ts](src/app/api/contact/route.ts) (`verifyTurnstile` → Cloudflare siteverify). **Default deaktiviert** → Formular verhält sich ohne Keys wie bisher (Honeypot + Rate-Limit).
-- **Beobachtung:** Test-POST aufs Kontaktformular gibt auf Preview HTTP 500 an der SMTP-Stelle (Mailversand) – vermutlich SMTP-Passwort auf Preview nicht gesetzt. Vorbestehend, vor Go-Live Live-Versand testen.
+- **Beobachtung:** Test-POST aufs Kontaktformular gibt auf Preview HTTP 500 an der SMTP-Stelle (Mailversand) – SMTP-Daten kommen von der Kundin (Google Workspace), werden später gesetzt.
+
+**Kontakt-Mail ins CI gebracht (2026-06-01):** Admin-Mails (Einladung/Passwort-Reset) waren schon im CI-Template (`src/lib/email-templates.ts`: cremefarben, weiße Karte, Serifen-Headline). Die Kontaktformular-Mail ging dagegen als schlichtes `<pre>` raus. Neu: `contactNotificationEmail()` im selben Template (Label/Wert-Blöcke für Name/E-Mail/Telefon/Nachricht, „direkt antworten"-Hinweis via replyTo, eigener Footer). `wrapper()` nimmt jetzt optionalen `footerNote`-Parameter. **HTML-Escaping** (`esc()`) der Nutzereingaben ergänzt (fehlte im alten `<pre>`, Injection-Schutz). [api/contact/route.ts](src/app/api/contact/route.ts) nutzt das Template als `html`, Plaintext bleibt als `text`-Fallback.
 
 ## Zuletzt davor (2026-05-03) – Vanessa-Feedback Runde 2 + Endabnahme
 

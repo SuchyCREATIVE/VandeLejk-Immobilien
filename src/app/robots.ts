@@ -13,8 +13,14 @@ export default function robots(): MetadataRoute.Robots {
     siteUrl.includes('localhost')
 
   if (isPreview) {
+    // Preview bleibt für Google & Co. gesperrt (keine Indexierung der Vorschau),
+    // aber SEO-Audit-Tools werden gezielt erlaubt, damit Dennis Checks fahren kann.
     return {
-      rules: { userAgent: '*', disallow: '/' },
+      rules: [
+        { userAgent: 'Seobility', allow: '/' },
+        { userAgent: 'SEOkicks-Robot', allow: '/' },
+        { userAgent: '*', disallow: '/' },
+      ],
     }
   }
 
