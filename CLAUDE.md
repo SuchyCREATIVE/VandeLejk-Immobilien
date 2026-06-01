@@ -99,6 +99,15 @@ Quelle: E-Mail „Der Countdown läuft :-)" vom 20.05. (`Screenshots/Der Countdo
 
 **Offen:** LinkedIn-URL 404t für Crawler/ausgeloggte Besucher (für Dennis eingeloggt ok) – Vanessa soll öffentliche Profil-URL prüfen, sonst Icon raus. /kontakt + Startseite (295 Wörter, knapp unter 300) optional noch leicht ausbaubar.
 
+**Turnstile (Spam-Schutz) + Google-Fonts-Check (2026-06-01, gleiche Session):**
+- **Google Fonts sind bereits lokal** – `next/font/google` (Playfair, Jost) self-hosted unter `/_next/static/media/*.woff2`, KEINE externen googleapis/gstatic-Requests. DSGVO-konform, nichts zu tun.
+- **Cloudflare Turnstile** komplett eingebaut, im Admin schaltbar (3 Settings-Keys: `turnstile_enabled` Toggle, `turnstile_site_key`, `turnstile_secret_key`). Key-Value-Settings → keine Schema-Migration.
+  - Admin-Sektion „Spam-Schutz" in `(admin)/admin/einstellungen/page.tsx` (Toggle + 2 Keys, Link zum Cloudflare-Dashboard).
+  - Öffentlicher Endpunkt `GET /api/settings/turnstile` liefert NUR `{enabled, siteKey}` (Secret bleibt serverseitig).
+  - Frontend [KontaktClient.tsx](src/app/kontakt/KontaktClient.tsx): lädt Widget via `next/script` nur wenn aktiviert, Token wird mitgesendet, Submit blockt ohne Token, Reset bei Fehler.
+  - Serverseitige Verifikation in [api/contact/route.ts](src/app/api/contact/route.ts) (`verifyTurnstile` → Cloudflare siteverify). **Default deaktiviert** → Formular verhält sich ohne Keys wie bisher (Honeypot + Rate-Limit).
+- **Beobachtung:** Test-POST aufs Kontaktformular gibt auf Preview HTTP 500 an der SMTP-Stelle (Mailversand) – vermutlich SMTP-Passwort auf Preview nicht gesetzt. Vorbestehend, vor Go-Live Live-Versand testen.
+
 ## Zuletzt davor (2026-05-03) – Vanessa-Feedback Runde 2 + Endabnahme
 
 **Bilder Erfolgsprojekt „Benrath" – kaputte Thumbs gefixt:**

@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import nodemailer from "nodemailer";
 import { z } from "zod";
 import { prisma } from "@/lib/prisma";
+import { contactNotificationEmail } from "@/lib/email-templates";
 
 /* ─── Cloudflare Turnstile (optional, im Admin schaltbar) ──── */
 async function verifyTurnstile(token: string | undefined, ip: string): Promise<boolean> {
@@ -148,7 +149,7 @@ Gesendet über das Kontaktformular auf vandelejk-immobilien.de
       replyTo: email,
       subject: `Kontaktanfrage von ${name}`,
       text:    mailContent,
-      html:    `<pre style="font-family:sans-serif;white-space:pre-wrap">${mailContent}</pre>`,
+      html:    contactNotificationEmail({ firstname, lastname, email, phone, message }),
     });
   } catch (err) {
     console.error("[contact] SMTP error:", err);

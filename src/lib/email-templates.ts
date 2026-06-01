@@ -1,6 +1,15 @@
 const BASE_URL = process.env.NEXTAUTH_URL ?? process.env.AUTH_URL ?? "https://vandelejk-immobilien.de";
 
-function wrapper(content: string) {
+// Nutzereingaben für die Einbettung in HTML-Mails escapen (Injection-Schutz)
+function esc(text: string) {
+  return String(text)
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;")
+    .replace(/"/g, "&quot;");
+}
+
+function wrapper(content: string, footerNote = "Diese E-Mail wurde automatisch generiert. Bitte nicht antworten.") {
   return `<!DOCTYPE html>
 <html lang="de">
 <head>
@@ -44,7 +53,7 @@ function wrapper(content: string) {
             VandeLejk Immobilien · Vanessa Lejk
           </p>
           <p style="margin:6px 0 0;font-family:Arial,sans-serif;font-size:10px;color:#c4bdb4;">
-            Diese E-Mail wurde automatisch generiert. Bitte nicht antworten.
+            ${footerNote}
           </p>
         </td></tr>
 
@@ -112,6 +121,47 @@ export function inviteEmail(opts: {
     </p>`;
 
   return wrapper(content);
+}
+
+// ─── Template: Kontaktanfrage (an Vanessa) ───────────────────────────────────
+export function contactNotificationEmail(opts: {
+  firstname: string;
+  lastname: string;
+  email: string;
+  phone: string;
+  message: string;
+}) {
+  const name = esc(`${opts.firstname} ${opts.lastname}`);
+  const messageHtml = esc(opts.message).replace(/\n/g, "<br />");
+
+  const content = `
+    <h1 style="margin:0 0 8px;font-family:Georgia,serif;font-size:26px;font-weight:400;color:#3d4047;line-height:1.2;">
+      Neue<br /><em style="font-style:italic;color:#6b6f78;">Kontaktanfrage</em>
+    </h1>
+    <p style="margin:16px 0 28px;font-family:Arial,sans-serif;font-size:13px;line-height:1.7;color:#6b6f78;">
+      Über das Kontaktformular auf Ihrer Website ist eine neue Anfrage eingegangen.
+    </p>
+
+    ${label("Name")}
+    ${value(name)}
+
+    ${label("E-Mail-Adresse")}
+    ${value(`<a href="mailto:${esc(opts.email)}" style="color:#3d4047;text-decoration:none;">${esc(opts.email)}</a>`)}
+
+    ${label("Telefon")}
+    ${value(`<a href="tel:${esc(opts.phone)}" style="color:#3d4047;text-decoration:none;">${esc(opts.phone)}</a>`)}
+
+    ${label("Nachricht")}
+    <p style="margin:0;font-family:Arial,sans-serif;font-size:13px;line-height:1.7;color:#3d4047;background:#f5f3ef;padding:16px;">${messageHtml}</p>
+
+    <p style="margin:28px 0 0;font-family:Arial,sans-serif;font-size:11px;color:#a09b93;line-height:1.6;">
+      Antworten Sie einfach direkt auf diese E-Mail, um ${esc(opts.firstname)} zu erreichen.
+    </p>`;
+
+  return wrapper(
+    content,
+    "Gesendet über das Kontaktformular auf vandelejk-immobilien.de"
+  );
 }
 
 // ─── Template: Passwort zurücksetzen ─────────────────────────────────────────
