@@ -1,6 +1,38 @@
 import { NextRequest, NextResponse } from "next/server";
 import nodemailer from "nodemailer";
 import { z } from "zod";
+import { prisma } from "@/lib/prisma";
+
+/* ─── Cloudflare Turnstile (optional, im Admin schaltbar) ──── */
+async function verifyTurnstile(token: string | undefined, ip: string): Promise<boolean> {
+  const rows = await prisma.settings.findMany({
+    where: { key: { in: ["turnstile_enabled", "turnstile_secret_key"] } },
+  });
+  const map = Object.fromEntries(rows.map((r) => [r.key, r.value]));
+  const enabled = map.turnstile_enabled ? JSON.parse(map.turnstile_enabled) : false;
+  const secret = map.turnstile_secret_key ?? "";
+
+  // Wenn nicht aktiviert oder kein Secret hinterlegt: kein Captcha-Zwang.
+  if (!enabled || !secret) return true;
+  if (!token) return false;
+
+  try {
+    const form = new URLSearchParams();
+    form.append("secret", secret);
+    form.append("response", token);
+    if (ip && ip !== "unknown") form.append("remoteip", ip);
+
+    const res = await fetch("https://challenges.cloudflare.com/turnstile/v0/siteverify", {
+      method: "POST",
+      body: form,
+    });
+    const data = (await res.json()) as { success?: boolean };
+    return data.success === true;
+  } catch (err) {
+    console.error("[contact] Turnstile verify error:", err);
+    return false;
+  }
+}
 
 /* ─── Simple in-memory rate limiter ──────────────────────── */
 const rateMap = new Map<string, { count: number; reset: number }>();
@@ -29,6 +61,7 @@ const schema = z.object({
   message:   z.string().min(10).max(3000),
   privacy:   z.literal(true),
   hp_field:  z.string().max(0).optional(), // honeypot
+  turnstileToken: z.string().optional(),   // Cloudflare Turnstile
 });
 
 /* ─── Handler ─────────────────────────────────────────────── */
@@ -61,12 +94,21 @@ export async function POST(req: NextRequest) {
     );
   }
 
-  const { firstname, lastname, email, phone, message, hp_field } = parsed.data;
+  const { firstname, lastname, email, phone, message, hp_field, turnstileToken } = parsed.data;
   const name = `${firstname} ${lastname}`;
 
   // Honeypot check
   if (hp_field) {
     return NextResponse.json({ ok: true }); // silent reject
+  }
+
+  // Cloudflare Turnstile (nur falls im Admin aktiviert)
+  const captchaOk = await verifyTurnstile(turnstileToken, ip);
+  if (!captchaOk) {
+    return NextResponse.json(
+      { message: "Bot-Schutz fehlgeschlagen. Bitte laden Sie die Seite neu und versuchen Sie es erneut." },
+      { status: 403 }
+    );
   }
 
   // Build transporter from env variables

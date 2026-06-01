@@ -1,6 +1,7 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect, useRef } from "react";
+import Script from "next/script";
 import { motion } from "framer-motion";
 import Image from "next/image";
 import { useForm } from "react-hook-form";
@@ -22,6 +23,16 @@ const schema = z.object({
 
 type FormData = z.infer<typeof schema>;
 
+/* ─── Cloudflare Turnstile (global script API) ────────────── */
+declare global {
+  interface Window {
+    turnstile?: {
+      render: (el: HTMLElement, opts: Record<string, unknown>) => string;
+      reset: (id?: string) => void;
+    };
+  }
+}
+
 const inputCls =
   "w-full border border-beige bg-white px-4 py-3.5 text-sm text-anthrazit placeholder-sand/70 focus:border-anthrazit-light focus:outline-none transition-colors duration-200";
 const labelCls = "block text-[10px] tracking-[0.2em] uppercase text-anthrazit mb-2";
@@ -29,6 +40,37 @@ const labelCls = "block text-[10px] tracking-[0.2em] uppercase text-anthrazit mb
 export default function KontaktPage() {
   const [submitted,   setSubmitted]   = useState(false);
   const [serverError, setServerError] = useState<string | null>(null);
+
+  // Turnstile (im Admin schaltbar)
+  const [turnstileCfg, setTurnstileCfg] = useState<{ enabled: boolean; siteKey: string }>({ enabled: false, siteKey: "" });
+  const [captchaToken, setCaptchaToken] = useState("");
+  const widgetRef   = useRef<HTMLDivElement>(null);
+  const widgetIdRef = useRef<string | null>(null);
+
+  useEffect(() => {
+    fetch("/api/settings/turnstile")
+      .then((r) => r.json())
+      .then((d) => setTurnstileCfg({ enabled: !!d.enabled, siteKey: d.siteKey ?? "" }))
+      .catch(() => {});
+  }, []);
+
+  function renderTurnstile() {
+    const ts = window.turnstile;
+    if (!ts || widgetIdRef.current !== null || !widgetRef.current) return;
+    if (!turnstileCfg.enabled || !turnstileCfg.siteKey) return;
+    widgetIdRef.current = ts.render(widgetRef.current, {
+      sitekey: turnstileCfg.siteKey,
+      callback: (t: string) => setCaptchaToken(t),
+      "error-callback": () => setCaptchaToken(""),
+      "expired-callback": () => setCaptchaToken(""),
+    });
+  }
+
+  // Falls das Script schon geladen war, als die Config eintraf
+  useEffect(() => {
+    if (turnstileCfg.enabled && turnstileCfg.siteKey) renderTurnstile();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [turnstileCfg]);
 
   const {
     register,
@@ -39,15 +81,26 @@ export default function KontaktPage() {
   const onSubmit = async (data: FormData) => {
     if (data.hp_field) return;
     setServerError(null);
+
+    if (turnstileCfg.enabled && !captchaToken) {
+      setServerError("Bitte bestätigen Sie, dass Sie kein Roboter sind.");
+      return;
+    }
+
     try {
       const res = await fetch("/api/contact", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(data),
+        body: JSON.stringify({ ...data, turnstileToken: captchaToken }),
       });
       if (!res.ok) {
         const err = await res.json().catch(() => ({}));
         setServerError(err.message ?? "Ein Fehler ist aufgetreten. Bitte versuchen Sie es erneut.");
+        // Turnstile-Token ist einmalig gültig – Widget für neuen Versuch zurücksetzen
+        if (window.turnstile && widgetIdRef.current !== null) {
+          window.turnstile.reset(widgetIdRef.current);
+          setCaptchaToken("");
+        }
       } else {
         setSubmitted(true);
       }
@@ -58,6 +111,14 @@ export default function KontaktPage() {
 
   return (
     <>
+      {turnstileCfg.enabled && turnstileCfg.siteKey && (
+        <Script
+          src="https://challenges.cloudflare.com/turnstile/v0/api.js"
+          strategy="afterInteractive"
+          onLoad={renderTurnstile}
+        />
+      )}
+
       {/* ─── Page Header ─── */}
       <section className="pt-36 pb-20 px-6 bg-cream">
         <div className="max-w-4xl mx-auto">
@@ -259,6 +320,11 @@ export default function KontaktPage() {
                       <p className="mt-1.5 text-xs text-red-500">{errors.privacy.message}</p>
                     )}
                   </div>
+
+                  {/* Cloudflare Turnstile */}
+                  {turnstileCfg.enabled && turnstileCfg.siteKey && (
+                    <div ref={widgetRef} className="min-h-[65px]" />
+                  )}
 
                   {/* Server Error */}
                   {serverError && (

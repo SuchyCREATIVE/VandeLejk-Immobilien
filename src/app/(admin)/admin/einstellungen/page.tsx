@@ -17,6 +17,9 @@ type Settings = {
   smtp_pass: string;
   smtp_from: string;
   smtp_from_name: string;
+  turnstile_enabled: boolean;
+  turnstile_site_key: string;
+  turnstile_secret_key: string;
 };
 
 const DEFAULT: Settings = {
@@ -32,6 +35,9 @@ const DEFAULT: Settings = {
   smtp_pass: "",
   smtp_from: "",
   smtp_from_name: "VandeLejk Immobilien",
+  turnstile_enabled: false,
+  turnstile_site_key: "",
+  turnstile_secret_key: "",
 };
 
 export default function EinstellungenAdmin() {
@@ -256,6 +262,80 @@ export default function EinstellungenAdmin() {
         >
           <Check size={13} /> {saving ? "Speichert…" : "SMTP speichern"}
         </button>
+      </section>
+
+      {/* ─── Spam-Schutz / Cloudflare Turnstile ─── */}
+      <section className="bg-white border border-beige p-6">
+        <h2 className="text-sm font-medium text-anthrazit-dark mb-1 pb-3 border-b border-beige">
+          Spam-Schutz (Cloudflare Turnstile)
+        </h2>
+        <p className="text-xs text-anthrazit-light mb-4 mt-3 leading-relaxed">
+          Schützt das Kontaktformular vor Bots – DSGVO-freundlich, ohne Cookies.
+          Schlüssel erhalten Sie kostenlos im{" "}
+          <a
+            href="https://dash.cloudflare.com/?to=/:account/turnstile"
+            target="_blank" rel="noopener noreferrer"
+            className="underline hover:text-anthrazit"
+          >
+            Cloudflare-Dashboard
+          </a>{" "}
+          (Turnstile → Widget hinzufügen). Ohne aktivierten Schalter bleibt das
+          Formular wie bisher (nur Honeypot + Rate-Limit).
+        </p>
+
+        {/* Toggle */}
+        <div className="flex items-center justify-between mb-5">
+          <div>
+            <p className="text-sm text-anthrazit-dark mb-0.5">
+              {settings.turnstile_enabled ? "Aktiviert" : "Deaktiviert"}
+            </p>
+            <p className="text-xs text-anthrazit-light">
+              {settings.turnstile_enabled
+                ? "Das Kontaktformular zeigt das Turnstile-Widget."
+                : "Kein Captcha im Kontaktformular."}
+            </p>
+          </div>
+          <button
+            onClick={() => {
+              const newVal = !settings.turnstile_enabled;
+              setSettings((s) => ({ ...s, turnstile_enabled: newVal }));
+              saveSetting("turnstile_enabled", newVal);
+            }}
+            className="ml-6 shrink-0 transition-colors"
+          >
+            {settings.turnstile_enabled
+              ? <ToggleRight size={44} className="text-anthrazit-dark" />
+              : <ToggleLeft  size={44} className="text-sand" />}
+          </button>
+        </div>
+
+        <div className="space-y-4">
+          {[
+            { key: "turnstile_site_key",   label: "Site Key (öffentlich)", type: "text" },
+            { key: "turnstile_secret_key", label: "Secret Key (geheim)",   type: "password" },
+          ].map(({ key, label, type }) => (
+            <div key={key}>
+              <label className="block text-[10px] tracking-widest uppercase text-anthrazit-light mb-1.5">{label}</label>
+              <div className="flex gap-2">
+                <input
+                  type={type}
+                  placeholder={key === "turnstile_site_key" ? "0x4AAAAAAA…" : "0x4AAAAAAA…"}
+                  value={(settings as Record<string, unknown>)[key] as string}
+                  onChange={(e) => setSettings((s) => ({ ...s, [key]: e.target.value }))}
+                  className="flex-1 border border-beige px-3 py-2 text-sm text-anthrazit focus:border-anthrazit-light focus:outline-none"
+                />
+                <button
+                  onClick={() => saveSetting(key as keyof Settings, (settings as Record<string, unknown>)[key])}
+                  disabled={saving === key}
+                  className="flex items-center gap-1.5 bg-anthrazit-dark text-white px-4 py-2 text-[10px] tracking-[0.15em] uppercase hover:bg-anthrazit transition-colors disabled:opacity-50"
+                >
+                  <Check size={12} /> {saving === key ? "…" : "OK"}
+                </button>
+              </div>
+              {msgs[key] && <p className="mt-1 text-xs text-green-700">{msgs[key]}</p>}
+            </div>
+          ))}
+        </div>
       </section>
     </div>
   );
